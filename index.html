@@ -1342,17 +1342,16 @@
             </form>
 
             <!-- Social Login Options -->
-            <div class="mt-6">
-                <div class="text-center text-gray-500 mb-4">OR</div>
-                <button id="google-login-btn" class="btn btn-3d w-full py-3 rounded-lg bg-white text-black font-bold flex items-center justify-center hover:bg-gray-200 transition-colors">
-                    <i class="fab fa-google mr-3"></i> Sign in with Google
-                </button>
-                <!-- NOTE: Instagram/Facebook login requires complex server-side authentication (OAuth). 
-                     We'll use a placeholder button for visual continuity, recommending the use of Google. -->
-                <button disabled class="btn btn-3d w-full py-3 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center mt-3 cursor-not-allowed opacity-50">
-                    <i class="fab fab fa-instagram mr-3"></i> Sign in with Instagram (Unavailable)
-                </button>
-            </div>
+            <div class="mt-6 text-center">
+                <p class="text-gray-400 mb-4">Or login with:</p>
+                <div class="flex justify-center gap-4">
+                    <button id="google-login-btn" class="btn btn-3d bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg flex items-center gap-2">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button id="github-login-btn" class="btn btn-3d bg-gray-800 hover:bg-secondary text-white py-2 px-4 rounded-lg flex items-center gap-2">
+                        <i class="fab fa-github"></i> GitHub
+                    </button>
+                </div>
         </div>
     </div>
 
@@ -5635,6 +5634,7 @@
     </script>
 </body>
 </html>
+
 
 
 
