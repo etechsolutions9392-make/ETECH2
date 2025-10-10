@@ -5318,13 +5318,15 @@
 } else if (lowerCommand.includes('who created you') || lowerCommand.includes('who developed you') || lowerCommand.includes('you are developed by') || lowerCommand.includes('your developer') || lowerCommand.includes('your creator') || lowerCommand.includes('you are developed by whom')) {
     action.executed = true;
     action.response = "I was created by Indra, the founder of E-TECH SOLUTIONS.";
-} else if (lowerCommand.includes('about indra') || lowerCommand.includes('indra') || lowerCommand.includes('who is indra') || lowerCommand.includes('tell me about indra')) {
+} 
+ else if (lowerCommand.includes('about indra') || lowerCommand.includes('indra') || lowerCommand.includes('who is indra') || lowerCommand.includes('tell me about indra')) {
     action.executed = true;
     action.response = "INDRA, an electronics engineer and educator with over 3 years of experience. He passionates to make electronics education accessible to everyone through this platform, E-TECH SOLUTIONS.";
-} else if (lowerCommand.includes('qualifications') || lowerCommand.includes('experience')) {
+}else if (lowerCommand.includes('qualifications') || lowerCommand.includes('experience')) {
     action.executed = true;
     action.response = "INDRA holds a Diploma in Electronics and Communication Engineering, is a Certified IoT Specialist, has over 2 years of industry experience, 1 year of teaching experience, and has published over 20 technical papers.";
-} else if (lowerCommand.includes('what is nanotechnology') || lowerCommand.includes('nanotech')) {
+}
+ else if (lowerCommand.includes('what is nanotechnology') || lowerCommand.includes('nanotech')) {
     action.executed = true;
     action.response = "Nanotechnology is the manipulation of matter at atomic and molecular scales to create new materials and devices with unique properties.";
 } else if (lowerCommand.includes('what is digital electronics')) {
@@ -5417,91 +5419,11 @@
 } else if (lowerCommand.includes('what is combinational circuit')) {
     action.executed = true;
     action.response = "A combinational circuit is a digital circuit where the output depends only on the present inputs.";
-} else if (lowerCommand.includes('what is sequential circuit')) {
+} 
+ else if (lowerCommand.includes('what is sequential circuit')) {
     action.executed = true;
     action.response = "A sequential circuit is a digital circuit where the output depends on present inputs and past states.";
-} else if (lowerCommand.includes('what is ram')) {
-    action.executed = true;
-    action.response = "RAM (Random Access Memory) is a type of computer memory used for temporary storage while a system is running.";
-} else if (lowerCommand.includes('what is rom')) {
-    action.executed = true;
-    action.response = "ROM (Read Only Memory) is a type of non-volatile memory that permanently stores data.";
-} else if (lowerCommand.includes('what is cache memory')) {
-    action.executed = true;
-    action.response = "Cache memory is a small, high-speed memory located close to the CPU to improve processing speed.";
-} else if (lowerCommand.includes('what is virtual memory')) {
-    action.executed = true;
-    action.response = "Virtual memory is a memory management technique that uses a portion of storage as an extension of RAM.";
-} else if (lowerCommand.includes('what is flash memory')) {
-    action.executed = true;
-    action.response = "Flash memory is a type of non-volatile memory used in USB drives, SSDs, and memory cards.";
-} else if (lowerCommand.includes('what is sram')) {
-    action.executed = true;
-    action.response = "SRAM (Static RAM) is a type of RAM that retains data as long as power is supplied.";
-} else if (lowerCommand.includes('what is dram')) {
-    action.executed = true;
-    action.response = "DRAM (Dynamic RAM) is a type of RAM that stores each bit of data in a capacitor and requires refreshing.";
-} else if (lowerCommand.includes('what is bios')) {
-    action.executed = true;
-    action.response = "BIOS (Basic Input Output System) is firmware that initializes hardware during startup and loads the operating system.";
-} else if (lowerCommand.includes('what is software')) {
-    action.executed = true;
-    action.response = "Software is a set of instructions that tells a computer how to perform specific tasks.";
-} else if (lowerCommand.includes('what is hardware')) {
-    action.executed = true;
-    action.response = "Hardware refers to the physical components of a computer system like CPU, RAM, and storage devices.";
-} else if (lowerCommand.includes('what is operating system') || lowerCommand.includes('os')) {
-    action.executed = true;
-    action.response = "An Operating System is system software that manages hardware, software, and provides services for applications.";
-} else if (lowerCommand.includes('what is kernel')) {
-    action.executed = true;
-    action.response = "The kernel is the core part of an operating system that manages system resources and communication between hardware and software.";
-} else if (lowerCommand.includes('what is compiler')) {
-    action.executed = true;
-    action.response = "A compiler is a program that translates source code into machine code.";
-} else if (lowerCommand.includes('what is interpreter')) {
-    action.executed = true;
-    action.response = "An interpreter is a program that executes code line by line without converting it to machine code first.";
-} else if (lowerCommand.includes('what is assembler')) {
-    action.executed = true;
-    action.response = "An assembler is a program that translates assembly language into machine code.";
-} else if (lowerCommand.includes('what is algorithm')) {
-    action.executed = true;
-    action.response = "An algorithm is a step-by-step procedure or formula for solving a problem.";
-} else if (lowerCommand.includes('what is data structure')) {
-    action.executed = true;
-    action.response = "A data structure is a way of organizing and storing data so that it can be accessed and modified efficiently.";
-} else if (lowerCommand.includes('what is stack')) {
-    action.executed = true;
-    action.response = "A stack is a linear data structure that follows the Last In First Out (LIFO) principle.";
-} else if (lowerCommand.includes('what is queue')) {
-    action.executed = true;
-    action.response = "A queue is a linear data structure that follows the First In First Out (FIFO) principle.";
-} else if (lowerCommand.includes('what is linked list')) {
-    action.executed = true;
-    action.response = "A linked list is a linear data structure where elements are stored in nodes connected by pointers.";
-} else if (lowerCommand.includes('what is array')) {
-    action.executed = true;
-    action.response = "An array is a data structure that stores a fixed-size sequence of elements of the same type.";
-} else if (lowerCommand.includes('what is tree in data structure') || lowerCommand.includes('tree data structure')) {
-    action.executed = true;
-    action.response = "A tree is a hierarchical data structure consisting of nodes connected by edges, with one root node.";
-} else if (lowerCommand.includes('what is graph in data structure') || lowerCommand.includes('graph data structure')) {
-    action.executed = true;
-    action.response = "A graph is a data structure consisting of vertices (nodes) connected by edges.";
-} else if (lowerCommand.includes('what is database')) {
-    action.executed = true;
-    action.response = "A database is an organized collection of data that can be accessed, managed, and updated electronically.";
-} else if (lowerCommand.includes('what is dbms')) {
-    action.executed = true;
-    action.response = "DBMS stands for Database Management System, software used to manage databases efficiently.";
-} else if (lowerCommand.includes('what is rdbms')) {
-    action.executed = true;
-    action.response = "RDBMS stands for Relational Database Management System, a DBMS that stores data in tables with relationships.";
-} else if (lowerCommand.includes('what is sql')) {
-    action.executed = true;
-    action.response = "SQL (Structured Query Language) is a standard language for managing and querying databases.";
-}
+} 
                 
                 // 2. Open/Close Application (Modals)
                 else if (lowerCommand.includes('open cart') || lowerCommand.includes('show cart')) {
@@ -5713,6 +5635,7 @@
     </script>
 </body>
 </html>
+
 
 
 
