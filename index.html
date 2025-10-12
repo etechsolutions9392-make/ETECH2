@@ -2013,7 +2013,25 @@
                 
                     aiSummary: "This core IoT project teaches you how to bridge hardware (relays, lights) and software (cloud platform, Wi-Fi) to create a controllable home environment. The key learning outcome is **secure device control over the internet**, foundational for any smart device career."
                 },
-               
+                { 
+                    id: 'ard1', 
+                    name: 'Automatic Irrigation System', 
+                    theme: 'Agriculture & Environmental Monitoring', // NEW FIELD
+                    aim: 'To design and implement an automated watering system for plants based on real-time soil moisture data, saving water and improving plant health.', // NEW FIELD
+                    description: 'A project using Arduino Uno to measure soil moisture and automatically water plants using a small pump.', 
+                    image: 'https://images.unsplash.com/photo-1594803986683-12a81878d655?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80', 
+                    price: 899, 
+                    time: '3 hours', 
+                    chip: 'Arduino Uno', 
+                    type: 'arduino',
+                    applications: ['Small home gardens', 'Vertical farming setups', 'Educational tool for sensors'],
+                    advantages: ['Simple to build and program.', 'Excellent introduction to analog inputs and DC motors.', 'Efficient water usage.'],
+                    features: ['Soil moisture level display (LCD)', 'Automatic pump activation', 'Adjustable moisture threshold', 'Manual override button'], // EXPANDED
+                    requirements: ['Arduino Uno', 'Soil Moisture Sensor', 'DC Water Pump', 'Relay Module', 'LCD Display (16x2)', 'Hoses and Water Supply'], // EXPANDED
+                    sensorsUsed: ['Soil Moisture Sensor'],
+                    buyLink: 'https://forms.gle/buy-arduino-irrigation-kit',
+                    aiSummary: "This project provides a perfect introduction to closed-loop control systems. You'll learn how to interpret analog data from a **Soil Moisture Sensor** and use an **Arduino** to trigger an actuator (water pump) to maintain optimal conditions. It's practical and a great resume builder."
+                },
   ];
             // --- END Consolidated Project Data ---
 
@@ -3317,3 +3335,4 @@
     </script>
 </body>
 </html>
+
