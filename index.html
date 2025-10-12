@@ -623,7 +623,7 @@
             gap: 2rem;
         }
 
-        /* Mobile Responsive Nav Menu (Auto-Hides) */
+        /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 768px) {
             .mobile-toggle {
                 display: block;
@@ -671,7 +671,7 @@
             nav ul li {
                 width: 100%;
                 text-align: center;
-                border-bottom: 1px solid var(--border-color); /* Corrected variable name */
+                border-bottom: 1px solid var(--border-color);
             }
             nav ul li:last-child {
                 border-bottom: none;
@@ -688,12 +688,26 @@
                 grid-template-columns: 1fr;
             }
             .hero h1 {
-                font-size: 2.2rem;
+                font-size: 2.5rem; /* Slightly increased for better impact */
+                line-height: 1.2;
+            }
+
+            /* MOBILE FIX: Stack hero buttons vertically for better layout */
+            .hero-btns {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            .hero-btns a {
+                margin-left: 0 !important; /* Override ml-4 utility */
+                width: 80%;
+                max-width: 300px;
             }
             
-            /* FIX: Project Cards Side-by-Side on Mobile - already set to 2 columns */
+            /* MOBILE FIX: Project Cards set to 1 column to prevent squishing content */
             #projects .projects-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-template-columns: repeat(1, minmax(0, 1fr));
             }
 
             /* FIX: Component Cards - Use 2 columns on mobile */
@@ -702,9 +716,9 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
-            /* FIX: Sensor Cards - Use 3 columns on mobile to keep them small */
+            /* MOBILE FIX: Sensor Cards - Use 2 columns on mobile to give more space */
             #sensors .responsive-card-grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
             
             /* FIX: Courses - One column on mobile */
@@ -1168,7 +1182,7 @@
                 <button class="filter-btn btn btn-3d bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-secondary" data-filter="cse">Computer Science</button>
             </div>
             <!-- UPDATED: Changed grid-cols-1 to grid-cols-2 for side-by-side mobile project cards -->
-            <div class="projects-grid responsive-card-grid grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8" id="projects-grid">
+            <div class="projects-grid responsive-card-grid grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-8" id="projects-grid">
                 <!-- Projects will be dynamically rendered here -->
             </div>
         </div>
@@ -1735,6 +1749,7 @@
             // --- D3.js Skill Tree Rendering (Unchanged) ---
             function renderSkillTree(progress) {
                 const container = document.getElementById('skill-tree-container');
+                if (!container) return; // Add a guard clause
                 container.innerHTML = ''; // Clear previous tree
                 
                 const width = container.clientWidth;
@@ -2874,8 +2889,71 @@
                     characteristics: ["Opposes the flow of electric current", "Measured in Ohms (\\Omega)", "Power rating determines how much heat it can dissipate", "Available in fixed and variable (potentiometer) types"], 
                     applications: "Used to reduce current flow, adjust signal levels, divide voltages, and terminate transmission lines." 
                 },
-               
-                // ... (other components truncated for brevity)
+                capacitor: {
+                    title: "Capacitor",
+                    img: "https://images.unsplash.com/photo-1623949978434-d375225a1e74?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    definition: "A capacitor is a device that stores electrical energy in an electric field. It is a passive electronic component with two terminals.",
+                    symbol: "Two parallel lines (\\text{||})",
+                    characteristics: ["Stores electric charge", "Measured in Farads (F)", "Blocks DC current but allows AC current to pass", "Voltage rating specifies maximum safe voltage"],
+                    applications: "Used in filtering, energy storage, signal coupling and decoupling, and timing circuits."
+                },
+                inductor: {
+                    title: "Inductor",
+                    img: "https://images.unsplash.com/photo-1617861376803-35a1a1f110af?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    definition: "An inductor, also called a coil, choke, or reactor, is a passive two-terminal electrical component that stores energy in a magnetic field when electric current flows through it.",
+                    symbol: "A coiled line (\\text{∿})",
+                    characteristics: ["Stores energy in a magnetic field", "Measured in Henrys (H)", "Opposes changes in current", "Core material affects inductance"],
+                    applications: "Used in filters, oscillators, transformers, and power supplies."
+                },
+                diode: {
+                    title: "Diode",
+                    img: "https://images.unsplash.com/photo-1623949978434-d375225a1e74?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    definition: "A diode is a two-terminal electronic component that conducts current primarily in one direction (asymmetric conductance); it has low (ideally zero) resistance in one direction, and high (ideally infinite) resistance in the other.",
+                    symbol: "Arrow pointing to a line (\\text{⇥})",
+                    characteristics: ["Allows current flow in one direction (forward bias)", "Blocks current in the opposite direction (reverse bias)", "Forward voltage drop across it when conducting", "Types include LED, Zener, Schottky"],
+                    applications: "Used for rectification (AC to DC), signal demodulation, voltage regulation, and light emission (LEDs)."
+                },
+                transistor: {
+                    title: "Transistor",
+                    img: "https://images.unsplash.com/photo-1598435198971-e9a785203d47?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    definition: "A transistor is a semiconductor device used to amplify or switch electronic signals and electrical power. It is one of the basic building blocks of modern electronics.",
+                    symbol: "Varies (BJT, MOSFET)",
+                    characteristics: ["Can act as an amplifier or a switch", "Controlled by a small current (BJT) or voltage (MOSFET)", "Three terminals: Base/Gate, Collector/Drain, Emitter/Source"],
+                    applications: "Foundation of all modern electronics including computers, smartphones, and digital logic circuits."
+                },
+                ic: {
+                    title: "Integrated Circuit (IC)",
+                    img: "https://images.unsplash.com/photo-1555116553-3494236166a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    definition: "An integrated circuit or monolithic integrated circuit (also referred to as an IC, a chip, or a microchip) is a set of electronic circuits on one small flat piece (or 'chip') of semiconductor material, usually silicon.",
+                    symbol: "Rectangular box with pins",
+                    characteristics: ["Miniaturized electronic circuit", "Contains transistors, resistors, capacitors, etc.", "Classified by function (e.g., 555 timer, op-amp, microcontroller)"],
+                    applications: "Virtually all electronic equipment today uses ICs, from microprocessors in computers to memory chips and sensors."
+                },
+                'arduino-uno': {
+                    title: "Arduino Uno",
+                    img: "https://images.unsplash.com/photo-1623949978434-d375225a1e74?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    definition: "The Arduino Uno is an open-source microcontroller board based on the Microchip ATmega328P microcontroller. It's the most popular board for beginners starting with electronics and coding.",
+                    symbol: "N/A",
+                    characteristics: ["14 digital I/O pins (6 PWM)", "6 analog input pins", "USB connectivity", "Easy-to-use Arduino IDE"],
+                    applications: "Prototyping, robotics, home automation, interactive art, and countless hobbyist projects."
+                },
+                'esp32': {
+                    title: "ESP32",
+                    img: "https://images.unsplash.com/photo-1617861376803-35a1a1f110af?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    definition: "The ESP32 is a series of low-cost, low-power system on a chip microcontrollers with integrated Wi-Fi and dual-mode Bluetooth.",
+                    symbol: "N/A",
+                    characteristics: ["Integrated Wi-Fi and Bluetooth", "Dual-core processor", "More powerful than Arduino Uno", "Low power consumption modes"],
+                    applications: "Ideal for IoT projects, smart home devices, wearable electronics, and wireless sensing."
+                },
+                 ultrasonic: {
+                    title: "Ultrasonic Sensor",
+                    img: "https://images.unsplash.com/photo-1623949978434-d375225a1e74?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    definition: "An ultrasonic sensor is an instrument that measures the distance to an object using ultrasonic sound waves. It emits a sound wave and measures the time it takes for the echo to return.",
+                    symbol: "N/A",
+                    isSensor: true, sensorType: 'ultrasonic',
+                    characteristics: ["Measures distance without physical contact", "Uses sound waves (ultrasound)", "Consists of a transmitter and a receiver", "Accuracy can be affected by soft surfaces or air temperature"],
+                    applications: "Robotics for obstacle avoidance, parking sensors in cars, liquid level measurement, and security systems."
+                },
               
             };
             // --- END: Component Data Source (Expanded Content) ---
