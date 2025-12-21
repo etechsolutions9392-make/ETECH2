@@ -8,36 +8,49 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- UPDATED: Added necessary Firebase Social Auth imports -->
+    
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+   
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <!-- Load KaTeX for beautiful math/symbol rendering -->
+   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" xintegrity="sha384-Gvr4iO9rQk5QxK3m1i5hI9jP5i5E6qE6kQ5A0tE4Q4p5/2w7J3w8P4q1n2p7Q3E" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" xintegrity="sha384-6Xh5n0k2f/rJvC9g2z8tN7i5hE6qE6kQ5A0tE4Q4p5/2w7J3w8P4q1n2p7Q3E" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" xintegrity="sha384-FpYtW5m3gT/4t7/p/K0m6p+g5/2w7J3w8P4q1n2p7Q3E" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
-    <!-- NEW: Load D3.js for Skill Tree Visualization -->
+  
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
     <style>
         :root {
-            /* DARK THEME VARIABLES */
-            --primary: #121212; /* Deep Dark Background */
-            --secondary: #00e5ff; /* Cyan Accent - Main highlight */
-            --accent: #ff4081; /* Pink Accent - Secondary highlight/call-to-action */
-            --text-light: #ffffff; /* White text for visibility */
-            --text-mid: #a0a0a0; /* Gray text for body/subtext */
-            --card-bg: #1e1e1e; /* Slightly lighter card background */
-            --border-color: #333333; /* Dark border lines */
+            
+            --primary: #121212; 
+            --secondary: #00e5ff; 
+            --accent: #ff4081; 
+            --text-light: #ffffff; 
+            --text-mid: #a0a0a0; 
+            --card-bg: rgba(30, 30, 30, 0.6); 
+            --border-color: #333333; 
+        }
+
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; 
+            background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--primary);
-            color: var(--text-light); /* Ensure all body text is light */
+            background-color: transparent; 
+            color: var(--text-light); 
             scroll-behavior: smooth;
-            /* CRITICAL FIX: Prevent horizontal scrolling due to overflow */
             overflow-x: hidden; 
         }
         
@@ -58,13 +71,11 @@
             background: var(--accent);
         }
 
-        /* High Visibility Text */
         .glow-text {
             text-shadow: 0 0 5px rgba(0, 229, 255, 0.2), 0 0 10px rgba(0, 229, 255, 0.4);
             color: var(--text-light);
         }
         
-        /* NEW: E-TECH SOLUTIONS Heading Hover Effect */
         .logo-text.glow-text:hover {
             background: linear-gradient(135deg, var(--secondary), var(--accent), var(--secondary));
             background-size: 200% auto;
@@ -90,34 +101,31 @@
         }
 
         header {
-            background: rgba(18, 18, 18, 0.85); /* Semi-transparent dark header */
+            background: rgba(18, 18, 18, 0.7); 
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
-            transition: transform 0.3s ease-in-out; /* Added transform transition */
+            border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+            transition: transform 0.3s ease-in-out;
         }
         
-        /* NEW: Header Hiding Class */
         header.header-hidden {
             transform: translateY(-100%);
         }
 
         .header-container {
             display: flex;
-            /* FIX: Ensure content does not wrap unnecessarily */
             flex-wrap: nowrap; 
             justify-content: space-between;
             align-items: center;
-            /* Adjusted padding to be consistent and fit mobile */
             padding: 1rem 0.5rem; 
         }
         .logo-text {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.8rem;
             font-weight: 700;
-            white-space: nowrap; /* Prevent wrapping in desktop/tablet */
+            white-space: nowrap; 
             min-width: 0;
         }
         .logo-text span {
@@ -156,26 +164,10 @@
             padding: 10rem 0;
             text-align: center;
             position: relative;
-            /* Added deep space background image */
-            background-image: url('https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background: transparent; 
             overflow: hidden;
         }
         
-        /* Overlay for contrast */
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1;
-        }
-
         .hero > .container {
             position: relative;
             z-index: 2;
@@ -188,6 +180,12 @@
             text-transform: uppercase;
             color: var(--secondary);
             text-shadow: 0 0 15px var(--secondary);
+            animation: pulse-glow 3s infinite alternate;
+        }
+        
+        @keyframes pulse-glow {
+            from { text-shadow: 0 0 10px var(--secondary); }
+            to { text-shadow: 0 0 25px var(--secondary), 0 0 5px white; }
         }
         
         .section {
@@ -200,19 +198,18 @@
             font-size: 2.5rem;
             display: inline-block;
             margin-bottom: 2rem;
-            /* Ensure the text is visible with gradient */
             background: linear-gradient(45deg, var(--secondary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
         }
         
-        /* Card Styles (Dark Mode, High Visibility) */
         .card-3d {
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
         }
         
         .card-3d:hover {
@@ -222,19 +219,15 @@
         }
         
         .glassmorphism {
-            background: rgba(30, 30, 30, 0.8);
+            background: rgba(30, 30, 30, 0.6);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
         }
         
-        .neon-glow {
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
-        }
-        
         .btn-3d {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            color: var(--text-light); /* Default button text color */
+            color: var(--text-light); 
         }
         
         .btn-3d:active {
@@ -242,7 +235,6 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
-        /* NEW: Box Style for Action Buttons */
         .btn-box {
             border-radius: 0.5rem;
             text-transform: uppercase;
@@ -253,7 +245,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Styling for the Primary Action Buttons (Add to Cart, Checkout) */
         .btn-primary-action {
             background: linear-gradient(90deg, var(--secondary), var(--accent));
             color: var(--text-light);
@@ -265,7 +256,6 @@
             transform: scale(1.02);
         }
         
-        /* NEW: Buy Now Button Styling - Slightly different from primary to distinguish */
         .btn-buy-now {
             background-color: var(--accent);
             color: var(--text-light);
@@ -277,10 +267,8 @@
             transform: scale(1.02);
         }
 
-
-        /* Styling for the Secondary/Disabled Buttons (Available Soon) */
         .btn-secondary-action {
-            background-color: var(--card-bg);
+            background-color: rgba(30, 30, 30, 0.8);
             color: var(--text-mid);
             border: 1px solid var(--secondary);
         }
@@ -291,18 +279,54 @@
             cursor: not-allowed;
             opacity: 0.7;
         }
+
         
-        /* Floating Button Positioning & Styling */
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            border-color: var(--secondary);
+            background: rgba(0, 229, 255, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .cta-btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-btn-glow::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        
         #techwhiz-fab {
             bottom: 2rem;
             right: 2rem;
             z-index: 1001;
             width: 64px;
             height: 64px;
-            border-radius: 0.5rem; /* Box Type */
+            border-radius: 0.5rem;
         }
 
-        /* TechWhiz Voice Active Indicator */
         #techwhiz-fab.speech-active {
             animation: pulse-ring 1.5s infinite;
             box-shadow: 0 0 30px rgba(0, 229, 255, 1);
@@ -315,13 +339,12 @@
         }
 
         #cart-fab {
-            /* Positioned 4rem (64px button height + 16px gap) above techwhiz-fab (2rem) */
             bottom: 6rem;
             right: 2rem;
-            z-index: 1002; /* Above techwhiz */
+            z-index: 1002;
             width: 60px;
             height: 60px;
-            border-radius: 0.5rem; /* Box Type */
+            border-radius: 0.5rem;
             background: linear-gradient(145deg, var(--secondary), var(--accent));
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
@@ -330,17 +353,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: fixed; /* Added to ensure it floats */
+            position: fixed;
         }
         
         #cart-fab:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.7);
-        }
-
-        #cart-fab:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
         #cart-count {
@@ -356,22 +374,22 @@
             line-height: 1;
         }
 
-        /* Cart Modal Styling (Futuristic, Slides In) */
         #cart-modal {
             position: fixed;
             top: 0;
             right: 0;
             width: 100%;
-            max-width: 400px; /* Enhanced max width */
+            max-width: 400px;
             height: 100%;
-            background: var(--card-bg);
+            background: rgba(30, 30, 30, 0.95);
             box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
             transform: translateX(100%);
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             z-index: 1003;
             display: flex;
             flex-direction: column;
-            border-left: 2px solid var(--secondary); /* Neon border */
+            border-left: 2px solid var(--secondary);
+            backdrop-filter: blur(10px);
         }
         
         #cart-modal.open {
@@ -384,7 +402,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--primary); /* Header contrast */
+            background: rgba(18, 18, 18, 0.9);
         }
         
         .cart-header h3 {
@@ -393,17 +411,11 @@
             color: var(--secondary);
         }
         
-        #close-cart-btn {
-            font-size: 2rem;
-            padding: 0 0.5rem;
-            transition: color 0.2s;
-        }
-        
         #cart-modal-items {
             flex-grow: 1;
             overflow-y: auto;
             padding: 1rem 1.5rem;
-            background: var(--card-bg);
+            background: transparent;
         }
 
         .cart-modal-item {
@@ -414,12 +426,6 @@
             border-bottom: 1px dashed var(--border-color);
         }
         
-        .cart-modal-item img {
-            min-width: 48px;
-            min-height: 48px;
-        }
-        
-        /* NEW: Cart Item Controls Styling */
         .cart-controls button {
             width: 24px;
             height: 24px;
@@ -439,7 +445,7 @@
         .cart-footer {
             padding: 1.5rem;
             border-top: 1px solid var(--border-color);
-            background: var(--primary);
+            background: rgba(18, 18, 18, 0.9);
         }
         
         .cart-total-display {
@@ -455,11 +461,9 @@
             text-shadow: 0 0 5px rgba(255, 64, 129, 0.5);
         }
         
-        /* Component Detail Modal Styling */
         #component-detail-modal {
             background: rgba(0, 0, 0, 0.9);
-            /* Centering fix applied here */
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed;
             inset: 0;
             align-items: center;
@@ -480,22 +484,9 @@
             position: relative;
             max-height: 90vh;
             overflow-y: auto;
-        }
-        
-        #component-detail-content .detail-header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        #component-detail-content .detail-info h4 {
-            color: var(--secondary);
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-            font-family: 'Orbitron', sans-serif;
+            backdrop-filter: blur(15px);
         }
 
-        /* NEW: Canvas for Sensor Mock Visualization */
         #sensor-viz-canvas {
             width: 100%;
             height: 150px;
@@ -505,146 +496,58 @@
             margin-top: 1rem;
         }
 
-        /* New Styles for Dynamic Suggestions Sidebar */
-        .suggestions-sidebar {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            width: 250px;
-            background: rgba(30, 30, 30, 0.9);
-            backdrop-filter: blur(5px);
-            border-right: 2px solid var(--accent);
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            padding: 1rem;
-            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-        .suggestions-sidebar a {
-            text-decoration: none;
-        }
-        .progress-bar-container {
-            height: 10px;
-            background-color: #333;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 0.5rem;
-        }
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: var(--secondary);
-            transition: width 0.5s ease-in-out;
-        }
-        
-        /* D3 Skill Tree Container */
-        #skill-tree-container {
-            width: 100%;
-            height: 600px;
-            background-color: var(--card-bg);
-            border-radius: 0.75rem;
-            margin-top: 3rem;
-            border: 1px solid var(--border-color);
-            overflow: auto; /* Ensure tree is viewable */
-        }
-        
-        /* D3 Node Styles */
-        .node circle {
-            cursor: pointer;
-            fill: #555;
-            stroke: var(--secondary);
-            stroke-width: 3px;
-            transition: all 0.3s;
-        }
-        .node.completed circle {
-            fill: var(--secondary);
-            stroke: var(--accent);
-        }
-        .node text {
-            font-family: 'Inter', sans-serif;
-            font-size: 10px;
-            fill: var(--text-light);
-        }
-        .link {
-            fill: none;
-            stroke: #555;
-            stroke-width: 1.5px;
-            transition: stroke 0.3s;
-        }
-        .link.completed {
-            stroke: var(--secondary);
-        }
-
-        /* --- NEW/UPDATED RESPONSIVE LAYOUT STYLES --- */
-        
-        /* Mobile: Default is stack (col-span-1) */
         .responsive-grid-section {
             display: grid;
             grid-template-columns: repeat(1, minmax(0, 1fr));
             gap: 2rem;
-            /* CRITICAL FIX: Ensure full width container uses slight padding on mobile */
             padding: 0 1rem; 
         }
 
-        /* Tablet/Desktop: 2 columns */
         @media (min-width: 768px) {
             .responsive-grid-section {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
         
-        /* Large Desktop: 3 columns for projects/components section */
         @media (min-width: 1024px) {
-            /* Applies to the main sections with component cards */
             #basics .responsive-card-grid, 
             #microcontrollers .responsive-card-grid, 
             #sensors .responsive-card-grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr)); /* Use Tailwind classes here to maintain consistency */
+                grid-template-columns: repeat(4, minmax(0, 1fr)); 
             }
             #sensors .responsive-card-grid {
-                 grid-template-columns: repeat(6, minmax(0, 1fr)); /* 6 columns for dense sensor data */
+                 grid-template-columns: repeat(6, minmax(0, 1fr)); 
             }
             #projects .responsive-card-grid {
                  grid-template-columns: repeat(3, minmax(0, 1fr)); 
             }
             
-            /* Ensure Microcontrollers uses 4 columns on large screens */
             #microcontrollers .responsive-card-grid {
                  grid-template-columns: repeat(4, minmax(0, 1fr)); 
             }
         }
         
-        /* Overriding existing tailwind classes for consistency */
         #basics .grid, #microcontrollers .grid, #sensors .grid, #projects .grid {
             display: grid;
             gap: 2rem;
         }
 
-        /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 768px) {
             .mobile-toggle {
                 display: block;
                 color: var(--text-light);
             }
-            /* FIX: Ensure logo text shrinks on mobile for fit */
             .logo-text {
-                /* Reduced font size slightly to ensure fit, especially with icon */
                 font-size: 1.35rem; 
             }
-            /* FIX: Ensure logo container uses tight padding */
             .logo {
                 margin-left: 0.5rem;
             }
             
             nav ul {
-                display: flex; /* Kept display: flex here to enable positioning */
+                display: flex; 
                 flex-direction: column;
                 width: 100%;
-                
-                /* FIX: Use fixed position for true overlay */
                 position: fixed; 
                 top: 65px; 
                 left: 0;
@@ -654,16 +557,12 @@
                 backdrop-filter: blur(8px); 
                 border-top: 1px solid var(--border-color);
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
-                
-                /* 1. INITIAL HIDE: Move the menu completely off-screen to the left */
                 transform: translateX(-100%);
-                transition: transform 0.3s ease-in-out; /* Use ease-in-out for smooth slide */
-                
+                transition: transform 0.3s ease-in-out; 
                 overflow-y: auto; 
                 z-index: 999; 
                 padding-bottom: 2rem; 
             }
-            /* 2. SHOW MENU: Only move the menu back into view when the 'active' class is present */
             nav ul.active {
                 transform: translateX(0);
             }
@@ -688,11 +587,10 @@
                 grid-template-columns: 1fr;
             }
             .hero h1 {
-                font-size: 2.5rem; /* Slightly increased for better impact */
+                font-size: 2.5rem; 
                 line-height: 1.2;
             }
 
-            /* MOBILE FIX: Stack hero buttons vertically for better layout */
             .hero-btns {
                 display: flex;
                 flex-direction: column;
@@ -700,66 +598,55 @@
                 gap: 1rem;
             }
             .hero-btns a {
-                margin-left: 0 !important; /* Override ml-4 utility */
+                margin-left: 0 !important;
                 width: 80%;
                 max-width: 300px;
             }
             
-            /* MOBILE FIX: Project Cards set to 1 column to prevent squishing content */
             #projects .projects-grid {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
             }
 
-            /* FIX: Component Cards - Use 2 columns on mobile */
             #basics .responsive-card-grid,
             #microcontrollers .responsive-card-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
-            /* MOBILE FIX: Sensor Cards - Use 2 columns on mobile to give more space */
             #sensors .responsive-card-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
             
-            /* FIX: Courses - One column on mobile */
             #courses .responsive-card-grid {
                  grid-template-columns: repeat(1, minmax(0, 1fr));
             }
 
-            /* FIX: Contact Section - Ensure stacked columns and proper padding */
             #contact .grid {
                 grid-template-columns: 1fr;
-                padding: 0 1rem; /* Ensure inner content has padding too */
+                padding: 0 1rem; 
             }
 
-            /* FIX: Contact Phone Number Overflow */
             .contact-card .contact-text p {
-                /* Allow long text to wrap if necessary */
                 word-break: break-word; 
                 white-space: normal;
                 line-height: 1.4;
             }
 
-            /* FIX: General Container Padding Override for Mobile */
             .container {
                 width: 100%;
-                padding: 0 1rem; /* Add padding to main container on mobile */
+                padding: 0 1rem; 
                 margin: 0 auto;
             }
 
-            /* Overriding padding for the header container to ensure controls are visible */
             .header-container {
                 padding: 0.75rem 1rem;
             }
 
-            /* Overriding padding for sections that need full width but contain centered content */
             .section {
                  padding: 4rem 0;
             }
 
-            
             #cart-modal {
-                max-width: 100%; /* Full width on mobile */
+                max-width: 100%; 
             }
 
             #techwhiz-fab, #cart-fab {
@@ -770,7 +657,7 @@
             }
 
             #cart-fab {
-                bottom: 4.5rem; /* 50px + 10px gap */
+                bottom: 4.5rem; 
             }
 
             #component-detail-content {
@@ -781,27 +668,24 @@
                 flex-direction: column;
             }
             .suggestions-sidebar {
-                display: none; /* Hide sidebar on mobile for space */
+                display: none; 
             }
         }
         
-        /* Project Detail Modal Fixes for visibility */
         #project-detail-modal {
             background: rgba(0, 0, 0, 0.9);
-            /* FIX: Set a high Z-index to ensure it appears instantly and on top of everything */
-            z-index: 9999; /* MAXIMUM Z-INDEX */
+            z-index: 9999; 
         }
 
         #project-detail-content {
             background: var(--card-bg);
             border: 1px solid var(--secondary);
             color: var(--text-light);
-            /* Ensure it is scrollable and constrained */
             max-height: 95vh; 
             overflow-y: auto;
+            backdrop-filter: blur(15px);
         }
         
-        /* New Styles for Project Detail Info Tabs */
         .project-detail-tabs button {
             transition: all 0.3s ease;
             font-weight: 600;
@@ -828,20 +712,13 @@
             color: var(--text-mid);
         }
         
-        /* Component Detail Modal Fixes (Targeted for high visibility) */
-        .component-detail {
-            /* This section is removed as it's now replaced by #component-detail-modal */
-            display: none !important;
-        }
-        
-        /* Form input color fix */
         input:not(.razorpay-payment-button), textarea {
-            background-color: #333333 !important;
+            background-color: rgba(51, 51, 51, 0.8) !important;
             border-color: #555555 !important;
             color: var(--text-light) !important;
+            backdrop-filter: blur(5px);
         }
 
-        /* Overriding tailwind classes for text visibility */
         .text-gray-700 {
             color: var(--text-mid);
         }
@@ -849,42 +726,149 @@
             color: var(--text-light);
         }
         .bg-gray-800 {
-            background-color: #333 !important;
+            background-color: rgba(51, 51, 51, 0.8) !important;
         }
         .bg-gray-900 {
             background-color: #121212 !important;
         }
         
-        /* KaTeX specific style override for dark mode */
         .katex {
             color: var(--secondary);
             font-size: 1.1em;
             vertical-align: middle;
         }
 
-        /* FIX: Center all Modals */
         .modal-overlay-center {
             position: fixed;
             inset: 0;
-            display: none; /* Hidden by default */
+            display: none; 
             background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(5px);
-            align-items: center; /* Center vertically */
-            justify-content: center; /* Center horizontally */
+            align-items: center; 
+            justify-content: center; 
             padding: 1rem;
             z-index: 1005;
-            overflow-y: auto; /* Allow scrolling if content is too large */
+            overflow-y: auto; 
         }
         
-        /* NEW: Image scaling fix for component detail modal */
         #component-detail-content img {
-            object-fit: contain; /* Ensures the whole image is visible without cropping */
-            max-height: 200px; /* Optional: Constrain max height for better layout on desktop */
+            object-fit: contain; 
+            max-height: 200px; 
         }
+
+        .footer-cta-container {
+            background: linear-gradient(180deg, rgba(18,18,18,0) 0%, rgba(18,18,18,0.95) 100%);
+            border-top: 1px solid var(--secondary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer-cta-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-cta-heading {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        
+        #version-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 1001;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            border-radius: 999px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s;
+        }
+        
+        #version-btn:hover {
+            background: var(--secondary);
+            color: black;
+            box-shadow: 0 0 10px var(--secondary);
+        }
+        
+        #version-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(18, 18, 18, 0.95);
+            border: 1px solid var(--secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            z-index: 10000;
+            display: none;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.3);
+        }
+        
+        #version-modal h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        #version-modal ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        #version-modal li {
+            margin-bottom: 0.8rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        #version-modal li i {
+            color: var(--accent);
+            margin-right: 0.8rem;
+            margin-top: 0.3rem;
+        }
+        
+        #close-version-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: var(--text-mid);
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        #close-version-btn:hover {
+            color: white;
+        }
+
     </style>
 </head>
 <body>
-    <header id="main-header"> <!-- Added ID for JS scroll functionality -->
+    <canvas id="three-canvas"></canvas>
+
+    <header id="main-header"> 
         <div class="container header-container">
             <div class="logo flex items-center">
                 <img src="https://lh3.googleusercontent.com/pw/AP1GczMFGvwVU32NSsKv5V5pVdolG2i9-eEUBOupJmE6wvE5hKb08fmmPauG62OnGUmD0esm9pa-d285g6XBzAxuULCghMe8Obxi1mUTI3LcaMuGB0IJz-5-=w2400" alt="INDRA" class="w-12 h-12 rounded-full border-2 border-secondary">
@@ -903,7 +887,6 @@
                     <li><a href="https://forms.gle/ruvWdt6W2N5QmdRN6" class="nav-link-3d mobile-nav-link">Contact</a></li>
                     <li id="user-nav">
                         <a href="#" id="login-btn-nav" class="nav-link-3d">Login</a>
-                        <!-- UPDATED: Added click event to user avatar for profile modal -->
                         <div class="user-status flex items-center hidden" id="user-status">
                             <div id="user-avatar" class="user-avatar w-10 h-10 rounded-lg bg-secondary text-white flex items-center justify-center font-bold cursor-pointer hover:ring-2 ring-accent transition-all"></div>
                             <span id="user-name" class="ml-2"></span>
@@ -930,26 +913,100 @@
         </div>
     </section>
 
-    <section class="section" id="about">
-        <div class="container">
-            <div class="section-title text-center">
-                <h2>About Me</h2>
+   
+    <section class="section relative" id="about">
+       
+        <div class="absolute top-20 left-10 w-32 h-32 bg-secondary opacity-10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 right-10 w-48 h-48 bg-accent opacity-10 rounded-full blur-3xl"></div>
+        
+        <div class="container relative z-10">
+            <div class="section-title text-center mb-16">
+                <h2>The Innovator Behind E-TECH</h2>
+                <p class="text-gray-400 mt-2 max-w-2xl mx-auto">Bridging the gap between theory and real-world application for the next generation of engineers.</p>
             </div>
-            <!-- Using responsive-grid-section for dual column layout on desktop/tablet -->
-            <div class="about-content responsive-grid-section items-center justify-center card-3d glassmorphism p-8 neon-border">
-                <div class="profile-img transform hover:rotate-3 transition-transform duration-500">
-                    <img src="https://lh3.googleusercontent.com/pw/AP1GczMFGvwVU32NSsKv5V5pVdolG2i9-eEUBOupJmE6wvE5hKb08fmmPauG62OnGUmD0esm9pa-d285g6XBzAxuULCghMe8Obxi1mUTI3LcaMuGB0IJz-5-=w2400" alt="INDRA" class="rounded-xl shadow-xl transition-all duration-500 hover:shadow-2xl hover:scale-105 border-4 border-secondary/50">
+            
+            <div class="about-grid grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              
+                <div class="relative group mx-auto md:mx-0 max-w-sm">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-secondary to-accent rounded-xl blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative rounded-xl overflow-hidden shadow-2xl border-2 border-secondary/30 bg-card-bg transform transition-all duration-500 hover:scale-[1.02]">
+                        <img src="https://lh3.googleusercontent.com/pw/AP1GczMFGvwVU32NSsKv5V5pVdolG2i9-eEUBOupJmE6wvE5hKb08fmmPauG62OnGUmD0esm9pa-d285g6XBzAxuULCghMe8Obxi1mUTI3LcaMuGB0IJz-5-=w2400" alt="INDRA" class="w-full object-cover">
+                        
+                       
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-6">
+                            <span class="text-secondary font-orbitron font-bold text-xl tracking-widest">FOUNDER</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="profile-info text-center md:text-left">
-                    <h3 class="text-3xl font-bold font-orbitron text-white">Hi, I'm INDRA</h3>
-                    <p class="mt-4 text-lg text-gray-400">I'm an electronics engineer and educator with over 3 years of experience in the field. My passion is to make electronics and computer science education accessible to everyone, regardless of their background or experience level.</p>
-                    <div class="qualifications mt-6">
-                        <h4 class="text-xl font-orbitron font-bold text-secondary">Qualifications</h4>
-                        <ul class="list-none mt-2 text-gray-400">
-                            <li class="flex items-center mt-2"><i class="fas fa-graduation-cap mr-2 text-secondary"></i> DIPLOMA in Electronics And Communication Engineering</li>
-                            <li class="flex items-center mt-2"><i class="fas fa-certificate mr-2 text-secondary"></i> Certified IoT Specialist</li>
-                            <li class="flex items-center mt-2"><i class="fas fa-briefcase mr-2 text-secondary"></i> 2+ years of industry experience</li>
-                        </ul>
+
+             
+                <div class="about-text text-left">
+                     <h3 class="text-3xl font-orbitron font-bold text-white mb-4">
+                        Hi, I'm INDRA. <br>
+                        <span id="typing-text" class="text-secondary"></span><span class="cursor-blink text-accent">|</span>
+                     </h3>
+                     
+                     <p class="text-gray-300 mb-6 text-lg leading-relaxed">
+                        I am an Electronics Engineer and Educator with a passion for simplifying complex technologies. My mission is to empower students and hobbyists to stop just <em>reading</em> about technology and start <strong>building</strong> it.
+                     </p>
+                     
+                     <p class="text-gray-400 mb-8 leading-relaxed">
+                         Whether you're a high school student fascinated by robots or an engineering undergrad tackling final year projects, E-TECH provides the mentorship, kits, and code you need to succeed.
+                     </p>
+                     
+              
+                     <div class="grid grid-cols-3 gap-4 mb-8">
+                        <div class="stat-card p-4 rounded-lg text-center backdrop-blur-sm">
+                            <div class="text-3xl font-bold text-secondary font-orbitron counter" data-target="500">0</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wide mt-1">Students Mentored</div>
+                        </div>
+                        <div class="stat-card p-4 rounded-lg text-center backdrop-blur-sm">
+                            <div class="text-3xl font-bold text-accent font-orbitron counter" data-target="50">0</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wide mt-1">Projects Built</div>
+                        </div>
+                        <div class="stat-card p-4 rounded-lg text-center backdrop-blur-sm">
+                            <div class="text-3xl font-bold text-white font-orbitron counter" data-target="3">0</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wide mt-1">Years Experience</div>
+                        </div>
+                     </div>
+
+                    
+                     <h4 class="text-white font-bold mb-4 flex items-center"><i class="fas fa-bolt text-secondary mr-2"></i> Quick Connect</h4>
+                     <div class="flex flex-wrap gap-4">
+                        <a href="mailto:etechsolutions9392@gmail.com" class="btn btn-3d bg-gray-800 border border-secondary text-white hover:bg-secondary hover:text-black py-2 px-6 rounded-full transition-all flex items-center cta-btn-glow">
+                            <i class="fas fa-envelope mr-2"></i> Email Me
+                        </a>
+                        <a href="tel:+919392090575" class="btn btn-3d bg-gray-800 border border-accent text-white hover:bg-accent hover:text-white py-2 px-6 rounded-full transition-all flex items-center cta-btn-glow">
+                            <i class="fas fa-phone-alt mr-2"></i> Call Now
+                        </a>
+                        <a href="https://wa.me/919392090575" target="_blank" class="btn btn-3d bg-green-600 text-white hover:bg-green-500 py-2 px-6 rounded-full transition-all flex items-center shadow-lg shadow-green-900/50">
+                            <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                        </a>
+                     </div>
+                </div>
+            </div>
+            
+          
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-4 bg-white/5 border border-white/10 rounded-lg flex items-center gap-4 hover:bg-white/10 transition">
+                    <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center text-secondary text-xl"><i class="fas fa-graduation-cap"></i></div>
+                    <div>
+                        <h5 class="text-white font-bold">Diploma in ECE</h5>
+                        <p class="text-sm text-gray-400">Solid academic foundation</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-white/5 border border-white/10 rounded-lg flex items-center gap-4 hover:bg-white/10 transition">
+                    <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center text-accent text-xl"><i class="fas fa-certificate"></i></div>
+                    <div>
+                        <h5 class="text-white font-bold">IoT Specialist</h5>
+                        <p class="text-sm text-gray-400">Certified expert in IoT</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-white/5 border border-white/10 rounded-lg flex items-center gap-4 hover:bg-white/10 transition">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-400 text-xl"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div>
+                        <h5 class="text-white font-bold">Tech Mentor</h5>
+                        <p class="text-sm text-gray-400">Guiding future techies</p>
                     </div>
                 </div>
             </div>
@@ -962,13 +1019,7 @@
                 <h2>Electronic Basics</h2>
                 <p class="text-gray-400">Learn the fundamental components that form the building blocks of all electronic devices</p>
             </div>
-            <!-- Skill Tree Visualization Container -->
-           
-            <!-- End Skill Tree Visualization Container -->
-
-            <!-- UPDATED: Added responsive-card-grid class for fine-grained mobile control -->
             <div class="responsive-card-grid grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-8 mt-12">
-                <!-- Component Cards (Click to show details instantly in modal) -->
                 <div class="component-card card-3d glassmorphism p-6 text-center rounded-lg cursor-pointer" data-component="resistor" data-concept-id="resistor-basics">
                     <div class="component-icon"><i class="fas fa-bolt"></i></div>
                     <h4 class="font-orbitron text-xl font-bold text-white">Resistor</h4>
@@ -1009,9 +1060,7 @@
                 <h2>Microcontrollers</h2>
                 <p class="text-gray-400">Explore popular microcontroller platforms for embedded systems development</p>
             </div>
-            <!-- UPDATED: Added responsive-card-grid class, using 2 columns on mobile, 4 on desktop -->
             <div class="responsive-card-grid grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-8">
-                <!-- Microcontroller Cards (Click to show details instantly in modal) -->
                 <div class="component-card card-3d glassmorphism p-6 text-center rounded-lg cursor-pointer" data-component="arduino-uno" data-concept-id="mcu-arduino-uno">
                     <div class="component-icon"><i class="fas fa-bolt"></i></div>
                     <h4 class="font-orbitron text-xl font-bold text-white">Arduino Uno</h4>
@@ -1062,9 +1111,9 @@
                 <h2>Sensors</h2>
                 <p class="text-gray-400">Discover various sensors that enable interaction between the physical and digital worlds</p>
             </div>
-            <!-- UPDATED: Added responsive-card-grid class, using 3 columns on mobile, 6 on desktop -->
+           
             <div class="responsive-card-grid grid grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-8">
-                <!-- Sensor Cards (Click to show details instantly in modal) -->
+               
                 <div class="component-card card-3d glassmorphism p-6 text-center rounded-lg neon-border cursor-pointer" data-component="ultrasonic" data-concept-id="sensor-ultrasonic">
                     <div class="component-icon"><i class="fas fa-wave-square"></i></div>
                     <h4 class="font-orbitron text-xl font-bold text-white">Ultrasonic</h4>
@@ -1135,7 +1184,6 @@
                 <h2>Our Premium Courses</h2>
                 <p class="text-gray-400">Unlock in-depth knowledge and advanced project building with our specialized courses.</p>
             </div>
-            <!-- UPDATED: Added responsive-card-grid class, using 1 column on mobile, 3 on desktop -->
             <div class="responsive-card-grid grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-8">
                 <div class="course-card card-3d glassmorphism p-6 rounded-xl overflow-hidden neon-border">
                     <img src="https://lh3.googleusercontent.com/pw/AP1GczPvtSebwcEAoTS8k-OCNn_xZnUKH5rZXKAI4jLois7jfNsvPT14A1m11ZxNc1OFk6QXgYjp9lHolvmOWD8YnrbuP2acdqCFe_XIolbmvWSOd38hTmc=w2400" alt="Arduino Master" class="rounded-md w-full h-48 object-cover transition-transform duration-500 hover:scale-110">
@@ -1174,16 +1222,14 @@
                 <h2>Electronics & CSE Projects</h2>
                 <p class="text-gray-400">Browse our collection of IoT, Arduino, and Computer Science projects with complete guides and code.</p>
             </div>
-            <!-- RECTIFIED: Filter buttons unified to rely solely on JavaScript for active styling -->
             <div class="project-filters flex justify-center flex-wrap gap-4 mb-8">
                 <button class="filter-btn btn btn-3d bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-secondary" data-filter="all">All</button>
                 <button class="filter-btn btn btn-3d bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-secondary" data-filter="iot">IoT</button>
                 <button class="filter-btn btn btn-3d bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-secondary" data-filter="arduino">Arduino</button>
                 <button class="filter-btn btn btn-3d bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-secondary" data-filter="cse">Computer Science</button>
             </div>
-            <!-- UPDATED: Changed grid-cols-1 to grid-cols-2 for side-by-side mobile project cards -->
             <div class="projects-grid responsive-card-grid grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-8" id="projects-grid">
-                <!-- Projects will be dynamically rendered here -->
+               
             </div>
         </div>
     </section>
@@ -1193,7 +1239,6 @@
             <div class="section-title text-center">
                 <h2>Contact Me</h2>
             </div>
-            <!-- REMOVED MD:GRID-COLS-2 CLASS FROM TAILWIND IN FAVOR OF CSS MEDIA QUERY -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="contact-info flex flex-col gap-6">
                     <div class="contact-card card-3d glassmorphism p-6 rounded-xl neon-border flex items-center gap-4">
@@ -1207,7 +1252,6 @@
                         <div class="contact-icon w-14 h-14 rounded-lg bg-secondary flex items-center justify-center text-xl text-white"><i class="fas fa-phone"></i></div>
                         <div class="contact-text">
                             <h4 class="font-orbitron text-lg font-bold text-white">Phone</h4>
-                            <!-- FIX: Use `break-all` class and allow text to wrap -->
                             <p class="text-gray-400 break-all whitespace-normal">+91 9392090575, +91 9618646604, +91 7619457762</p> 
                         </div>
                     </div>
@@ -1249,9 +1293,18 @@
         </div>
     </section>
 
-    <footer class="bg-card-bg p-8 border-t border-border-color">
+    <footer class="footer-cta-container p-8">
         <div class="container">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="footer-cta-content">
+                <h3 class="footer-cta-heading">Ready to Build the Future?</h3>
+                <p class="text-gray-400 max-w-2xl mx-auto mb-6 text-lg">Join thousands of students and engineers mastering electronics with E-TECH SOLUTIONS. Get exclusive access to kits, code, and community support.</p>
+                <div class="flex gap-4 justify-center flex-wrap">
+                    <a href="#projects" class="btn btn-3d btn-primary-action btn-box">Start Building</a>
+                    <a href="https://forms.gle/ruvWdt6W2N5QmdRN6" class="btn btn-3d btn-secondary-action btn-box">Contact Support</a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 border-t border-border-color pt-8">
                 <div class="footer-col">
                     <h4 class="font-orbitron text-xl font-bold text-white">E-TECH SOLUTIONS</h4>
                     <p class="text-sm mt-4 text-gray-400">Providing high-quality e-learning resources for electronics enthusiasts and students worldwide.</p>
@@ -1295,18 +1348,35 @@
     </footer>
 
    
-    <!-- Chatbot Button (Z-index 1001, bottom: 2rem) -->
     <button id="techwhiz-fab" class="btn btn-3d fixed w-16 h-16 flex items-center justify-center text-3xl text-white focus:outline-none focus:ring-4 focus:ring-secondary/50" style="background: linear-gradient(145deg, var(--secondary), var(--accent));">
         <i class="fas fa-robot"></i>
     </button>
     
-    <!-- Floating Cart Button (Z-index 1002, bottom: 6rem, above TechWhiz) -->
     <button id="cart-fab" class="fixed text-xl text-white focus:outline-none">
         <i class="fas fa-shopping-cart"></i>
         <span id="cart-count">0</span>
     </button>
+
+   
+    <button id="version-btn">v3.50</button>
+
+   
+    <div id="version-modal">
+        <span id="close-version-btn">&times;</span>
+        <h2>Update Log: Version 3.50</h2>
+        <p class="text-gray-400 text-sm italic mb-4">Latest system improvements and features.</p>
+        <ul>
+            <li><i class="fas fa-id-card"></i> <strong>About Me Remodel:</strong> Redesigned the profile section with typing effects, interactive stats, and dynamic visual elements to better engage students.</li>
+            <li><i class="fas fa-address-book"></i> <strong>Quick Connect CTA:</strong> Added dedicated buttons for Email, Call, and WhatsApp directly in the profile section for instant communication.</li>
+            <li><i class="fas fa-chart-line"></i> <strong>Dynamic Stats:</strong> Implemented animated counters to showcase project and student impact.</li>
+            <li><i class="fas fa-rocket"></i> <strong>Performance:</strong> Optimized background animations and modal transitions.</li>
+        </ul>
+        <div class="mt-6 text-center">
+            <button class="btn btn-3d btn-primary-action btn-box w-full" onclick="document.getElementById('version-modal').style.display='none'">Got it!</button>
+        </div>
+    </div>
     
-    <!-- Cart Modal (Advanced Floating Panel) -->
+   
     <div id="cart-modal">
         <div class="cart-header">
             <h3 class="text-white">Your Cart (<span id="cart-item-count-header">0</span>)</h3>
@@ -1324,7 +1394,6 @@
         </div>
     </div>
     
-    <!-- Component Detail MODAL (Overlay component details here) -->
     <div id="component-detail-modal">
         <div id="component-detail-content" class="glassmorphism p-8 rounded-xl relative">
             <div class="detail-header flex justify-between items-center">
@@ -1332,20 +1401,17 @@
                 <button class="close-detail absolute top-4 right-4 text-4xl text-gray-400 hover:text-accent transition-colors">&times;</button>
             </div>
             <div class="detail-content flex flex-col md:flex-row gap-8 mt-6">
-                <!-- IMPORTANT: Removed object-cover and set max-height to 200px in CSS class above for object-fit: contain -->
                 <img id="detail-img" src="https://via.placeholder.com/400x300" alt="Component" class="rounded-lg shadow-lg w-full md:w-1/3 object-cover border-2 border-secondary/50">
                 <div class="detail-info flex-1">
                     <h4 class="font-bold text-lg text-secondary">Definition</h4>
                     <p id="detail-definition" class="text-gray-400"></p>
                     <h4 class="font-bold text-lg text-secondary mt-4">Symbol</h4>
                     <div id="detail-symbol" class="text-gray-400 p-2 border border-border-color rounded-lg mt-1"></div>
-                    <!-- NEW: Sensor Visualization Container (only visible for sensor types) -->
                     <div id="sensor-visualization-area" class="mt-4 hidden">
                          <h4 class="font-bold text-lg text-accent">Live Data Mock-up</h4>
                          <canvas id="sensor-viz-canvas"></canvas>
                          <p id="sensor-data-readout" class="text-sm text-gray-500 mt-1 italic">Status: Idle</p>
                     </div>
-                    <!-- END: Sensor Visualization Container -->
                     <h4 class="font-bold text-lg text-secondary mt-4">Characteristics</h4>
                     <ul id="detail-characteristics" class="list-disc ml-6 text-gray-400"></ul>
                     <h4 class="font-bold text-lg text-secondary mt-4">Applications</h4>
@@ -1359,9 +1425,8 @@
             </div>
         </div>
     </div>
-    <!-- END: Component Detail MODAL -->
     
-    <!-- Chatbox Modal -->
+  
     <div id="techwhiz-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div id="assistant-chat-modal-content" class="rounded-lg shadow-2xl max-w-lg w-full bg-gray-900 border border-secondary/20">
             <div class="sticky top-0 bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center rounded-t-lg">
@@ -1388,37 +1453,30 @@
         </div>
     </div>
     
-    <!-- Modals -->
-    <!-- UPDATED: Added modal-overlay-center class -->
+  
     <div id="auth-modal" class="modal-overlay-center">
-        <!-- LOGIN MODAL CONTAINER - Centered via items-center and justify-center -->
         <div class="bg-gray-900 rounded-lg shadow-2xl p-8 max-w-md w-full border border-secondary/20">
             <div class="flex justify-end"><button class="close-auth text-3xl text-gray-400 hover:text-white">&times;</button></div>
             <div class="auth-tabs flex justify-around mb-6 border-b border-gray-700">
                 <div class="auth-tab text-xl font-bold py-2 px-4 cursor-pointer text-secondary active" data-tab="login">Login</div>
                 <div class="auth-tab text-xl font-bold py-2 px-4 cursor-pointer text-gray-400" data-tab="register">Register</div>
             </div>
-            <!-- Login Form -->
             <form id="login-form" class="auth-form">
                 <input type="email" id="login-email" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white mb-4 focus:outline-none focus:border-secondary" placeholder="Email" required>
                 <input type="password" id="login-password" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white mb-6 focus:outline-none focus:border-secondary" placeholder="Password" required>
                 <button type="submit" class="btn btn-3d btn-primary-action btn-box w-full">Login</button>
             </form>
             
-            <!-- Register Form -->
             <form id="register-form" class="auth-form hidden">
                 <input type="text" id="register-name" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white mb-4 focus:outline-none focus:border-secondary" placeholder="Full Name" required>
                 <input type="email" id="register-email" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white mb-4 focus:outline-none focus:border-secondary" placeholder="Email" required>
                 <input type="password" id="register-password" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white mb-6 focus:outline-none focus:border-secondary" placeholder="Password" required>
                 <button type="submit" class="btn btn-3d btn-primary-action btn-box w-full">Register</button>
             </form>
-
-            
         </div>
     </div>
 
-    <!-- Order History Modal -->
-    <!-- UPDATED: Added modal-overlay-center class -->
+    
     <div id="order-history-modal" class="modal-overlay-center">
         <div class="bg-gray-900 rounded-lg shadow-2xl p-8 max-w-lg w-full border border-secondary/20">
             <div class="flex justify-between items-center">
@@ -1431,8 +1489,7 @@
         </div>
     </div>
     
-    <!-- NEW: Profile Management Modal -->
-    <!-- UPDATED: Added modal-overlay-center class -->
+
     <div id="profile-modal" class="modal-overlay-center">
         <div class="bg-gray-900 rounded-lg shadow-2xl p-8 max-w-xl w-full border border-accent/20">
             <div class="flex justify-between items-center">
@@ -1440,8 +1497,7 @@
                 <button id="close-profile-btn" class="text-3xl text-gray-400 hover:text-white">&times;</button>
             </div>
             
-            <div class="mt-6 grid grid-cols-1 gap-6"> <!-- CHANGED: Removed unnecessary md:grid-cols-2 -->
-                <!-- User Info -->
+            <div class="mt-6 grid grid-cols-1 gap-6">
                 <div class="glassmorphism p-4 rounded-lg border border-border-color">
                     <h3 class="text-xl font-bold text-secondary mb-3">Account Details</h3>
                     <p class="text-gray-400"><strong>Display Name:</strong> <span id="profile-display-name" class="text-white"></span></p>
@@ -1449,25 +1505,20 @@
                     <p class="text-gray-400"><strong>User ID:</strong> <span id="profile-user-id" class="text-xs text-accent break-all"></span></p>
                     <button id="edit-profile-btn" class="btn btn-3d btn-secondary-action py-2 px-4 mt-4 w-full">Edit Name</button>
                 </div>
-                
-            </div> <!-- CHANGED: Removed Project List Section here -->
+            </div>
             
             <div class="mt-6 border-t border-border-color pt-6 text-center">
                  <button id="profile-logout-btn" class="btn btn-3d bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-lg">Sign Out</button>
             </div>
         </div>
     </div>
-    <!-- END: Profile Management Modal -->
 
 
-    <!-- Project Detail Modal (FIXED: Ensuring immediate display on click) -->
-    <!-- NOTE: #project-detail-modal Z-index is 9999 for maximum priority -->
     <div id="project-detail-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4" style="z-index: 9999;">
         <div id="project-detail-content" class="glassmorphism p-8 rounded-xl max-w-3xl w-full relative">
             <button class="close-project-detail absolute top-4 right-4 text-4xl text-white hover:text-secondary">&times;</button>
             <div class="text-xl font-orbitron font-bold text-secondary mb-3">E-TECH SOLUTIONS Project Details</div>
             
-            <!-- Project Image & Quick Info -->
             <div class="flex flex-col md:flex-row gap-6">
                 <img id="project-detail-image" src="" alt="Project Image" class="rounded-lg w-full md:w-1/3 h-48 object-cover border-2 border-secondary/50">
                 <div class="flex-1">
@@ -1481,7 +1532,6 @@
                 </div>
             </div>
             
-            <!-- NEW: Tabbed Content for Detailed Information -->
             <div class="mt-6">
                  <div class="project-detail-tabs flex border-b border-border-color gap-4 overflow-x-auto">
                     <button class="py-2 px-1 text-base active" data-tab-target="#tab-details">Details & Aim</button>
@@ -1491,7 +1541,6 @@
                  </div>
                  
                  <div id="project-detail-tab-wrapper" class="project-detail-tab-content">
-                    <!-- Tab 1: Details & Aim -->
                     <div id="tab-details" data-tab-content class="active">
                         <h4 class="text-xl font-bold text-secondary mt-4">Project Aim</h4>
                         <p id="project-detail-aim" class="text-gray-400 mt-2 italic"></p>
@@ -1502,26 +1551,22 @@
                         <h4 class="text-xl font-bold text-secondary mt-4">E-TECH Advantages</h4>
                         <ul class="list-disc ml-6 mt-2 text-gray-400" id="project-detail-advantages"><li>N/A</li></ul>
                         
-                        <!-- NEW: Sensor View Section (Hidden if no relevant sensors) -->
                         <div id="project-sensor-view" class="mt-6 p-4 rounded-lg glassmorphism hidden">
                             <h4 class="text-xl font-bold text-accent"><i class="fas fa-satellite-dish mr-2"></i> Sensor View (Data Flow)</h4>
                             <ul class="flex flex-wrap gap-3 mt-3" id="project-detail-sensors-used"></ul>
                         </div>
                     </div>
                     
-                    <!-- Tab 2: Key Features -->
                     <div id="tab-features" data-tab-content class="hidden">
                         <h4 class="text-xl font-bold text-secondary mt-4">Key Features</h4>
                         <ul class="list-disc ml-6 mt-2 text-gray-400" id="project-detail-features"><li>N/A</li></ul>
                     </div>
                     
-                    <!-- Tab 3: Requirements -->
                     <div id="tab-requirements" data-tab-content class="hidden">
                          <h4 class="text-xl font-bold text-secondary mt-4">Required Components</h4>
                         <ul class="list-disc ml-6 mt-2 text-gray-400" id="project-detail-components"><li>N/A</li></ul>
                     </div>
                     
-                    <!-- Tab 4: AI Summary / TechWhiz Interaction -->
                     <div id="tab-techwhiz" data-tab-content class="hidden">
                         <h4 class="text-xl font-bold text-secondary mt-4">AI-Powered Overview</h4>
                         <button id="ai-summary-btn" class="btn btn-3d bg-accent text-white py-2 px-4 rounded-lg mt-2 w-full">AI-Powered Summary ✨</button>
@@ -1537,7 +1582,6 @@
                  </div>
             </div>
 
-                <!-- Action Buttons: Buy Now and Add to Cart -->
                 <div class="mt-8 flex gap-4 justify-between">
                     <a id="buy-now-from-detail" target="_blank" class="btn btn-3d btn-buy-now btn-box flex-1 text-lg">
                         <i class="fas fa-bolt mr-2"></i> Buy Kit Now
@@ -1555,7 +1599,157 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Firebase Config & Setup ---
+          
+            function init3DBackground() {
+                const canvas = document.getElementById('three-canvas');
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+                
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+
+                const particlesGeometry = new THREE.BufferGeometry();
+                const particlesCount = 700;
+                const posArray = new Float32Array(particlesCount * 3);
+
+                for(let i = 0; i < particlesCount * 3; i++) {
+                    posArray[i] = (Math.random() - 0.5) * 20;
+                }
+
+                particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+                const material = new THREE.PointsMaterial({
+                    size: 0.02,
+                    color: 0x00e5ff,
+                    transparent: true,
+                    opacity: 0.8
+                });
+
+                const particlesMesh = new THREE.Points(particlesGeometry, material);
+                scene.add(particlesMesh);
+
+                camera.position.z = 2;
+
+                let mouseX = 0;
+                let mouseY = 0;
+
+                document.addEventListener('mousemove', (event) => {
+                    mouseX = event.clientX / window.innerWidth - 0.5;
+                    mouseY = event.clientY / window.innerHeight - 0.5;
+                });
+
+                document.addEventListener('touchmove', (event) => {
+                    if(event.touches.length > 0) {
+                        mouseX = event.touches[0].clientX / window.innerWidth - 0.5;
+                        mouseY = event.touches[0].clientY / window.innerHeight - 0.5;
+                    }
+                });
+
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    particlesMesh.rotation.y += 0.001;
+                    particlesMesh.rotation.x += 0.0005;
+                    particlesMesh.rotation.y += 0.05 * (mouseX - particlesMesh.rotation.y);
+                    particlesMesh.rotation.x += 0.05 * (mouseY - particlesMesh.rotation.x);
+                    renderer.render(scene, camera);
+                };
+
+                animate();
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+            init3DBackground();
+            
+            
+            const textToType = ["Electronics Engineer."];
+            const typingElement = document.getElementById('typing-text');
+            let typeIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            let typeSpeed = 100;
+
+            function typeWriter() {
+                const currentText = textToType[typeIndex];
+                
+                if (isDeleting) {
+                    typingElement.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+                    typeSpeed = 50; 
+                } else {
+                    typingElement.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+                    typeSpeed = 150;
+                }
+
+                if (!isDeleting && charIndex === currentText.length) {
+                    isDeleting = true;
+                    typeSpeed = 2000; 
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    typeIndex = (typeIndex + 1) % textToType.length;
+                    typeSpeed = 500;
+                }
+
+                setTimeout(typeWriter, typeSpeed);
+            }
+            typeWriter();
+
+            const counters = document.querySelectorAll('.counter');
+            const aboutSection = document.getElementById('about');
+            let startedCounters = false;
+
+            const startCounters = () => {
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const increment = target / 100;
+                    
+                    const updateCounter = () => {
+                        const count = +counter.innerText;
+                        if(count < target) {
+                            counter.innerText = Math.ceil(count + increment);
+                            setTimeout(updateCounter, 20);
+                        } else {
+                            counter.innerText = target + "+"; 
+                        }
+                    };
+                    updateCounter();
+                });
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                if(entries[0].isIntersecting && !startedCounters) {
+                    startCounters();
+                    startedCounters = true;
+                }
+            }, { threshold: 0.5 });
+            
+            observer.observe(aboutSection);
+
+            
+            const versionBtn = document.getElementById('version-btn');
+            const versionModal = document.getElementById('version-modal');
+            const closeVersionBtn = document.getElementById('close-version-btn');
+
+            versionBtn.addEventListener('click', () => {
+                versionModal.style.display = 'block';
+            });
+
+            closeVersionBtn.addEventListener('click', () => {
+                versionModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (e) => {
+                if(e.target == versionModal) {
+                    versionModal.style.display = 'none';
+                }
+            });
+
+
             const __app_id = "default-app-id";
             const __firebase_config = '{"apiKey": "AIzaSyCyk9Jg_FW7jbVFh5XasK1Vb8_sP8J4zSE", "authDomain": "etech-d39e5.firebaseapp.com", "projectId": "etech-d39e5", "storageBucket": "etech-d39e5.firebasestorage.app", "messagingSenderId": "323388421053", "appId": "1:323388421053:web:9057d22d4ee4b7450398d4", "measurementId": "G-EV7M78EBGC"}';
             
@@ -1565,8 +1759,7 @@
             const db = firebase.firestore();
             firebase.firestore.setLogLevel('debug');
 
-            // --- UI Elements ---
-            const mainHeader = document.getElementById('main-header'); // Get the main header
+            const mainHeader = document.getElementById('main-header'); 
             const authModal = document.getElementById('auth-modal');
             const loginBtnNav = document.getElementById('login-btn-nav');
             const closeAuthBtn = document.querySelector('.close-auth');
@@ -1574,14 +1767,12 @@
             const authForms = document.querySelectorAll('.auth-form');
             const loginForm = document.getElementById('login-form');
             const registerForm = document.getElementById('register-form');
-            const googleLoginBtn = document.getElementById('google-login-btn');
             const userStatus = document.getElementById('user-status');
             const userAvatar = document.getElementById('user-avatar');
             const userName = document.getElementById('user-name');
             const logoutBtn = document.getElementById('logout-btn');
             const mobileToggle = document.querySelector('.mobile-toggle');
             const navMenu = document.getElementById('nav-menu');
-            // NEW: Select all mobile nav links
             const mobileNavLinks = document.querySelectorAll('.mobile-nav-link'); 
             const techwhizFab = document.getElementById('techwhiz-fab');
             const techwhizModal = document.getElementById('techwhiz-modal');
@@ -1609,11 +1800,10 @@
             const projectDetailFeatures = document.getElementById('project-detail-features');
             const projectDetailComponents = document.getElementById('project-detail-components');
             
-            // --- NEW Project Detail Elements ---
             const projectDetailApplications = document.getElementById('project-detail-applications');
             const projectDetailAdvantages = document.getElementById('project-detail-advantages');
-            const projectDetailAim = document.getElementById('project-detail-aim'); // NEW
-            const projectDetailThemeValue = document.getElementById('theme-value'); // NEW
+            const projectDetailAim = document.getElementById('project-detail-aim'); 
+            const projectDetailThemeValue = document.getElementById('theme-value'); 
             const projectSensorView = document.getElementById('project-sensor-view');
             const projectDetailSensorsUsed = document.getElementById('project-detail-sensors-used');
 
@@ -1623,16 +1813,12 @@
             const aiSummaryBtn = document.getElementById('ai-summary-btn');
             const aiSummaryContainer = document.getElementById('ai-summary-container');
             const aiSummaryText = document.getElementById('ai-summary-text');
-            const simulatorPlaceholderBtn = document.getElementById('simulator-placeholder-btn');
             
-            // NEW: Project Detail Tabs
             const projectDetailTabBtns = document.querySelectorAll('.project-detail-tabs button');
             const projectDetailTabWrapper = document.getElementById('project-detail-tab-wrapper');
-            const askTechwhizDetailBtn = document.getElementById('ask-techwhiz-detail-btn'); // Button in the content pane
-            const askTechwhizDetailBtnTab = document.getElementById('ask-techwhiz-detail-btn-tab'); // Button in the tab bar
+            const askTechwhizDetailBtn = document.getElementById('ask-techwhiz-detail-btn'); 
+            const askTechwhizDetailBtnTab = document.getElementById('ask-techwhiz-detail-btn-tab'); 
 
-
-            // --- Component Detail Modal Elements ---
             const componentCards = document.querySelectorAll('.component-card');
             const componentDetailModal = document.getElementById('component-detail-modal');
             const detailTitle = document.getElementById('detail-title');
@@ -1643,13 +1829,11 @@
             const detailApplications = document.getElementById('detail-applications');
             const closeDetailBtn = document.querySelector('#component-detail-modal .close-detail');
             const askTechwhizComponentBtn = document.getElementById('ask-techwhiz-component-btn');
-            // NEW Sensor Visualization elements
             const sensorVizArea = document.getElementById('sensor-visualization-area');
             const sensorVizCanvas = document.getElementById('sensor-viz-canvas');
             const sensorDataReadout = document.getElementById('sensor-data-readout');
-            let sensorVizInterval = null; // To hold the setInterval reference
+            let sensorVizInterval = null; 
             
-            // --- Cart Elements ---
             const cartFab = document.getElementById('cart-fab');
             const cartModal = document.getElementById('cart-modal');
             const closeCartBtn = document.getElementById('close-cart-btn');
@@ -1659,7 +1843,6 @@
             const cartItemCountHeader = document.getElementById('cart-item-count-header');
             const cartCheckoutBtn = document.getElementById('cart-checkout-btn');
 
-            // --- Profile Modal Elements ---
             const profileModal = document.getElementById('profile-modal');
             const closeProfileBtn = document.getElementById('close-profile-btn');
             const profileDisplayName = document.getElementById('profile-display-name');
@@ -1667,24 +1850,14 @@
             const profileUserId = document.getElementById('profile-user-id');
             const editProfileBtn = document.getElementById('edit-profile-btn');
             const profileLogoutBtn = document.getElementById('profile-logout-btn');
-            const profileConceptsCount = document.getElementById('profile-concepts-count');
-            const profileProjectsCount = document.getElementById('profile-projects-count');
-            const profileOverallProgressBar = document.getElementById('profile-overall-progress-bar');
-            
-            // --- Progress Elements ---
-            const suggestionsSidebar = document.querySelector('.suggestions-sidebar');
-            const dynamicSuggestionsContent = document.getElementById('dynamic-suggestions-content');
-            const overallProgressBar = document.getElementById('overall-progress-bar');
-            const progressPercentage = document.getElementById('progress-percentage');
             
             let cart = [];
-            let userProgress = {}; // Stores { conceptId: true/false }
-            let allConcepts = []; // Array of all concepts from Skill Tree data
+            let userProgress = {}; 
+            let allConcepts = []; 
             let userId = null;
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
             const progressCollectionPath = () => `artifacts/${appId}/users/${userId}/progress`;
 
-            // --- Skill Tree Data Structure (Unchanged) ---
             const skillTreeData = {
                 id: "root",
                 name: "E-TECH Path",
@@ -1735,161 +1908,9 @@
             extractAllConcepts(skillTreeData);
             const totalConcepts = allConcepts.length;
             
-            // --- D3.js Skill Tree Rendering (Unchanged) ---
             function renderSkillTree(progress) {
-                const container = document.getElementById('skill-tree-container');
-                if (!container) return; // Add a guard clause
-                container.innerHTML = ''; // Clear previous tree
                 
-                const width = container.clientWidth;
-                const height = 600;
-                
-                const svg = d3.select("#skill-tree-container").append("svg")
-                    .attr("width", width)
-                    .attr("height", height)
-                    .attr("viewBox", `0 0 ${width} ${height}`)
-                    .style("overflow", "visible")
-                    .append("g")
-                    .attr("transform", `translate(40, 0)`); // Shift tree right for nodes
-
-                const treeLayout = d3.tree()
-                    .size([height, width - 160]); // Size of the drawing area
-
-                // Define links based on parentId for non-nested children
-                function restructureData(data) {
-                    const nodesMap = new Map();
-                    const process = (node) => {
-                        nodesMap.set(node.id, node);
-                        if (node.children) {
-                            node.children.forEach(process);
-                        }
-                    };
-                    process(data);
-
-                    // Manually assign children based on parentId fields
-                    const rootNode = nodesMap.get("root");
-                    const level1 = rootNode.children[0];
-                    const level2 = rootNode.children[1];
-                    const level3 = rootNode.children[2];
-                    
-                    // Clear default hierarchy structure for flat/linear linking
-                    rootNode.children = [level1, level2, level3]; 
-
-                    // Define sequential links within levels
-                    level1.children[0].children = [level1.children[1]]; // Resistor -> Capacitor
-                    level1.children[1].children = [level1.children[2]]; // Capacitor -> Diode
-                    level1.children[2].children = [level1.children[3]]; // Diode -> Blinking LED
-
-                    level2.children[0].children = [level2.children[1]]; // Arduino Uno -> Transistor
-                    level2.children[1].children = [level2.children[2]]; // Transistor -> Traffic Light
-                    level2.children[2].children = [level2.children[3]]; // Traffic Light -> ESP32
-
-                    level3.children[0].children = [level3.children[2]]; // Ultrasonic -> Smart Alarm
-                    level3.children[1].children = []; // PIR is a parallel path
-                    level3.children[2].children = [level3.children[3]]; // Smart Alarm -> IoT Alarm
-                    
-                    // Link between levels
-                    level1.children[3].children = [level2]; // Blinking LED -> Level 2
-                    level2.children[3].children = [level3]; // ESP32 -> Level 3
-
-                    return d3.hierarchy(rootNode);
-                }
-
-                const root = restructureData(JSON.parse(JSON.stringify(skillTreeData))); // Deep clone for modification
-                
-                // Set custom node depths for better horizontal flow
-                root.each(d => {
-                    const nodesMap = new Map(root.descendants().map(d => [d.data.id, d]));
-                    if (d.data.id.includes('level1')) d.depth = 1;
-                    else if (d.data.id.includes('level2')) d.depth = 2;
-                    else if (d.data.id.includes('level3')) d.depth = 3;
-                    else if (d.data.parentId && nodesMap.get(d.data.parentId)) {
-                        d.depth = nodesMap.get(d.data.parentId).depth + 1;
-                    } else if (d.data.parentId) {
-                         // Fallback for nodes like 'resistor-basics' that are first in their level
-                        d.depth = d.data.id.includes('basics') ? 2 : (d.data.id.includes('mcu') ? 3 : 4);
-                    }
-                });
-
-                treeLayout(root);
-
-                const nodesMap = new Map(root.descendants().map(d => [d.data.id, d]));
-
-                // 1. Draw Links
-                const link = svg.selectAll(".link")
-                    .data(root.links())
-                    .enter().append("path")
-                    .attr("class", d => `link ${progress[d.target.data.parentId] ? 'completed' : ''}`)
-                    .attr("d", d3.linkHorizontal()
-                        .x(d => d.y)
-                        .y(d => d.x)
-                    );
-
-                // 2. Draw Nodes
-                const node = svg.selectAll(".node")
-                    .data(root.descendants())
-                    .enter().append("g")
-                    .attr("class", d => `node ${d.children ? 'internal' : 'leaf'} ${progress[d.data.id] ? 'completed' : ''}`)
-                    .attr("transform", d => `translate(${d.y},${d.x})`);
-
-                // Add circles
-                node.append("circle")
-                    .attr("r", d => d.data.id === 'root' ? 0 : (d.children ? 6 : 10))
-                    .attr("stroke-width", d => d.data.id === 'root' ? 0 : 3)
-                    .on("click", (event, d) => {
-                        if (d.data.type === 'concept' || d.data.type === 'project') {
-                             handleConceptClick(d.data.id, progress);
-                        }
-                    })
-                    .on("mouseover", function(event, d) {
-                        d3.select(this).attr('r', d.children ? 8 : 12).style("fill", varFromTailwind('--accent'));
-                        showToast(d.data.name + (progress[d.data.id] ? ' (Completed)' : ' (Pending)'), 'secondary');
-                    })
-                    .on("mouseout", function(event, d) {
-                        d3.select(this).attr('r', d.children ? 6 : 10).style("fill", progress[d.data.id] ? varFromTailwind('--secondary') : '#555');
-                    });
-
-                // Add text labels
-                node.append("text")
-                    .attr("dy", d => d.children ? 20 : 15)
-                    .attr("text-anchor", "middle")
-                    .text(d => d.data.name)
-                    .style("fill", varFromTailwind('--text-light'));
-                    
-                // Add icons for completed nodes
-                node.filter(d => progress[d.data.id] && (d.data.type === 'concept' || d.data.type === 'project'))
-                    .append("text")
-                    .attr("dy", 4)
-                    .attr("text-anchor", "middle")
-                    .attr("class", "fas text-lg")
-                    .style("font-family", "FontAwesome")
-                    .style("fill", varFromTailwind('--primary'))
-                    .text('\uf058'); // Checkmark icon
             }
-
-            function handleConceptClick(conceptId, progress) {
-                 if (userId) {
-                    if (progress[conceptId]) {
-                        showToast(`${conceptId} already completed!`, 'secondary');
-                    } else {
-                        // Check dependencies (simplified mock check)
-                        let isDependencyComplete = true;
-                        // Simplified check: allow completion if a dependency is marked as 'completed'
-                        // In a real app, this would require traversing the dependency chain.
-                        // For the purpose of this demo, we'll keep the mock simple.
-                        
-                        if (isDependencyComplete) {
-                            toggleConceptCompletion(conceptId, true);
-                        } else {
-                             showToast(`Must complete prerequisite before starting ${conceptId}.`, 'accent');
-                        }
-                    }
-                } else {
-                    showToast("Please log in to track your progress.", 'accent');
-                }
-            }
-            
-            // --- Progress Tracking (Firestore) (Unchanged) ---
             
             async function toggleConceptCompletion(conceptId, isComplete) {
                 if (!userId) return;
@@ -1909,10 +1930,8 @@
                 const completedCount = Object.keys(progressData).length;
                 const percentage = totalConcepts > 0 ? Math.round((completedCount / totalConcepts) * 100) : 0;
                 
-                // Update Skill Tree
                 renderSkillTree(progressData);
                 
-                // Update Component Card borders
                 document.querySelectorAll('.component-card').forEach(card => {
                     const conceptId = card.dataset.conceptId;
                     card.classList.remove('border-green-500', 'ring-2', 'ring-green-500');
@@ -1924,13 +1943,6 @@
                 });
             }
             
-            function generateDynamicSuggestions(progressData) {
-                // NOTE: This function is simplified due to dependency on missing elements
-                // dynamicSuggestionsContent.innerHTML = '';
-                // ... (logic remains the same)
-            }
-            
-            // --- Component Completion Mock Button (Unchanged) ---
             document.querySelectorAll('.component-card').forEach(card => {
                 card.addEventListener('dblclick', () => {
                     if (userId) {
@@ -1943,20 +1955,18 @@
                 });
             });
 
-            // --- Real-time Firestore Progress Listener (Unchanged) ---
             function setupProgressListener(currentUserId) {
                 if (window.unsubscribeProgress) {
-                    window.unsubscribeProgress(); // Unsubscribe from previous user's listener
+                    window.unsubscribeProgress(); 
                 }
                 
                 if (!currentUserId) {
-                    updateLearningProgress({}); // Clear progress if logged out
+                    updateLearningProgress({}); 
                     return;
                 }
                 
                 const q = db.collection(progressCollectionPath());
                 
-                // Listen for changes
                 window.unsubscribeProgress = q.onSnapshot(snapshot => {
                     const progressData = {};
                     snapshot.forEach(doc => {
@@ -1971,8 +1981,6 @@
                 });
             }
 
-
-            // --- Sensor Visualization Mock Logic (Unchanged) ---
             const sensorData = {
                 ultrasonic: { unit: 'cm', min: 2, max: 200, value: 50, update: 100 },
             };
@@ -1987,36 +1995,31 @@
                 let width = sensorVizCanvas.width = sensorVizCanvas.clientWidth;
                 let height = sensorVizCanvas.height = sensorVizCanvas.clientHeight;
                 
-                // Gauge drawing function
                 const drawGauge = () => {
                     ctx.clearRect(0, 0, width, height);
 
                     const centerX = width / 2;
-                    const centerY = height; // Draw from the bottom
+                    const centerY = height; 
                     const radius = height * 0.9;
-                    const startAngle = Math.PI; // 180 degrees
-                    const endAngle = 2 * Math.PI; // 360 degrees
+                    const startAngle = Math.PI; 
+                    const endAngle = 2 * Math.PI; 
 
-                    // Scale the value to the angle range (180 to 360 degrees)
                     const range = data.max - data.min;
                     const angleRatio = (data.value - data.min) / range;
                     const needleAngle = startAngle + (endAngle - startAngle) * angleRatio;
                     
-                    // Background Arc
                     ctx.beginPath();
                     ctx.arc(centerX, centerY, radius, startAngle, endAngle, false);
                     ctx.lineWidth = 20;
                     ctx.strokeStyle = varFromTailwind('--border-color');
                     ctx.stroke();
 
-                    // Fill Arc (Progress)
                     ctx.beginPath();
                     ctx.arc(centerX, centerY, radius, startAngle, needleAngle, false);
                     ctx.lineWidth = 20;
                     ctx.strokeStyle = varFromTailwind('--secondary');
                     ctx.stroke();
 
-                    // Needle
                     ctx.beginPath();
                     ctx.strokeStyle = varFromTailwind('--accent');
                     ctx.lineWidth = 3;
@@ -2027,26 +2030,21 @@
                     );
                     ctx.stroke();
                     
-                    // Center Dot
                     ctx.fillStyle = varFromTailwind('--accent');
                     ctx.beginPath();
                     ctx.arc(centerX, centerY, 5, 0, 2 * Math.PI);
                     ctx.fill();
 
-                    // Text Readout
                     ctx.fillStyle = varFromTailwind('--text-light');
                     ctx.font = '24px Orbitron';
                     ctx.textAlign = 'center';
                     ctx.fillText(`${data.value}${data.unit}`, centerX, centerY - radius / 3);
                 };
                 
-                // Mock data generation loop
                 sensorVizInterval = setInterval(() => {
-                    // Simulate random fluctuation
                     const delta = (Math.random() * 20) - 10;
                     let newValue = data.value + delta;
                     
-                    // Clamp value within min/max
                     if (newValue < data.min) newValue = data.min;
                     if (newValue > data.max) newValue = data.max;
 
@@ -2055,7 +2053,6 @@
                     drawGauge();
                 }, data.update);
 
-                // Initial draw and resize handler
                 drawGauge();
                 window.addEventListener('resize', () => {
                     width = sensorVizCanvas.width = sensorVizCanvas.clientWidth;
@@ -2073,19 +2070,16 @@
                 sensorDataReadout.textContent = 'Status: Idle';
             }
             
-            // Helper function to get Tailwind colors
             function varFromTailwind(varName) {
                 return getComputedStyle(document.documentElement).getPropertyValue(varName) || '#ffffff';
             }
 
-
-            // --- Consolidated Project Data (EXPANDED with two new projects) ---
             const projectsList = [
                 { 
                     id: 'iot1', 
                     name: 'Smart Home Automation System', 
-                    theme: 'IoT & Remote Control', // NEW FIELD
-                    aim: 'To develop a comprehensive, wireless system capable of controlling household appliances securely over the internet.', // NEW FIELD
+                    theme: 'IoT & Remote Control', 
+                    aim: 'To develop a comprehensive, wireless system capable of controlling household appliances securely over the internet.', 
                     description: 'Build a system to control lights, fans, and appliances remotely using ESP32 and a secure cloud platform.', 
                     image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80', 
                     price: 2500, 
@@ -2094,8 +2088,8 @@
                     type: 'iot',
                     applications: ['Residential automation', 'Remote device management', 'Energy optimization'],
                     advantages: ['Wireless control via Wi-Fi.', 'Scalable design for adding more devices.', 'Learning cloud integration basics (MQTT/HTTP).'],
-                    features: ['Remote control via app', 'Scheduler functions', 'Voice command integration', 'Over-The-Air (OTA) updates'], // EXPANDED
-                    requirements: ['ESP32 board', '2-channel Relay module', 'LEDs', 'Solid internet connection', 'Breadboard and Jumper Wires'], // EXPANDED
+                    features: ['Remote control via app', 'Scheduler functions', 'Voice command integration', 'Over-The-Air (OTA) updates'], 
+                    requirements: ['ESP32 board', '2-channel Relay module', 'LEDs', 'Solid internet connection', 'Breadboard and Jumper Wires'], 
                     sensorsUsed: ['None (Actuator focus)'],
                     buyLink: 'https://forms.gle/buy-iot-smart-home-kit',
                     aiSummary: "This core IoT project teaches you how to bridge hardware (relays, lights) and software (cloud platform, Wi-Fi) to create a controllable home environment. The key learning outcome is **secure device control over the internet**, foundational for any smart device career."
@@ -2103,8 +2097,8 @@
                 { 
                     id: 'ard1', 
                     name: 'Automatic Irrigation System', 
-                    theme: 'Agriculture & Environmental Monitoring', // NEW FIELD
-                    aim: 'To design and implement an automated watering system for plants based on real-time soil moisture data, saving water and improving plant health.', // NEW FIELD
+                    theme: 'Agriculture & Environmental Monitoring', 
+                    aim: 'To design and implement an automated watering system for plants based on real-time soil moisture data, saving water and improving plant health.', 
                     description: 'A project using Arduino Uno to measure soil moisture and automatically water plants using a small pump.', 
                     image: 'https://images.unsplash.com/photo-1594803986683-12a81878d655?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80', 
                     price: 2300, 
@@ -2113,19 +2107,13 @@
                     type: 'arduino',
                     applications: ['Small home gardens', 'Vertical farming setups', 'Educational tool for sensors'],
                     advantages: ['Simple to build and program.', 'Excellent introduction to analog inputs and DC motors.', 'Efficient water usage.'],
-                    features: ['Soil moisture level display (LCD)', 'Automatic pump activation', 'Adjustable moisture threshold', 'Manual override button'], // EXPANDED
-                    requirements: ['Arduino Uno', 'Soil Moisture Sensor', 'DC Water Pump', 'Relay Module', 'LCD Display (16x2)', 'Hoses and Water Supply'], // EXPANDED
+                    features: ['Soil moisture level display (LCD)', 'Automatic pump activation', 'Adjustable moisture threshold', 'Manual override button'], 
+                    requirements: ['Arduino Uno', 'Soil Moisture Sensor', 'DC Water Pump', 'Relay Module', 'LCD Display (16x2)', 'Hoses and Water Supply'], 
                     sensorsUsed: ['Soil Moisture Sensor'],
                     buyLink: 'https://forms.gle/buy-arduino-irrigation-kit',
                     aiSummary: "This project provides a perfect introduction to closed-loop control systems. You'll learn how to interpret analog data from a **Soil Moisture Sensor** and use an **Arduino** to trigger an actuator (water pump) to maintain optimal conditions. It's practical and a great resume builder."
                 },
-                
-  
-  
-                
-  
-   
-    {
+                 {
       "id": "iot2",
       "name": "Weather Monitoring Station",
       "theme": "Environmental Sensing & Data Logging",
@@ -3223,10 +3211,8 @@
       "aiSummary": "A crucial **network programming project**. The focus is on implementing the WebSocket protocol using Socket.io to achieve true low-latency, real-time interactivity essential for modern web applications."
     }
     
-  ];
-            // --- END Consolidated Project Data ---
+            ];
 
-            
             function renderProjects(filter = 'all') {
                 projectsGrid.innerHTML = '';
                 const allProjects = projectsList;
@@ -3246,7 +3232,6 @@
                     const tagClass = projectType === 'iot' ? 'bg-secondary' : (projectType === 'arduino' ? 'bg-accent' : 'bg-green-500');
                     const tagText = projectType === 'iot' ? 'IoT' : (projectType === 'arduino' ? 'Arduino' : 'CSE');
 
-                    // NOTE: Project card must contain the project ID to track completion (mock project IDs used for simplicity)
                     const conceptId = p.id;
                     const completedClass = userProgress[conceptId] ? 'border-green-500 ring-2 ring-green-500' : 'border-secondary/50';
 
@@ -3288,54 +3273,42 @@
                 
                 document.querySelectorAll('.project-card').forEach(card => {
                     card.addEventListener('click', (e) => {
-                        // Check if the click was on the cart button, if so, do nothing here
                         if (e.target.classList.contains('add-to-cart-btn')) {
                             return;
                         }
                         const data = card.dataset;
-                        const defaultError = '<li>Data not specified.</li>';
                         
-                        // Set the current project ID for TechWhiz button
                         askTechwhizDetailBtn.dataset.projectId = data.id;
                         askTechwhizDetailBtnTab.dataset.projectId = data.id;
 
-
-                        // --- CRITICAL FIX: AGGRESSIVELY FORCE-CLOSE ALL OTHER MODALS AND CLEAR DISPLAY STATE ---
-                        // Ensure all modals are closed before opening the project detail modal
                         if (profileModal) profileModal.style.display = 'none';
                         if (authModal) authModal.style.display = 'none';
                         if (cartModal) cartModal.classList.remove('open');
                         if (componentDetailModal) componentDetailModal.style.display = 'none';
                         if (orderHistoryModal) orderHistoryModal.style.display = 'none';
                         if (techwhizModal) techwhizModal.style.display = 'none';
-                        // --- END FIX ---
 
-                        // Clear previous content and hide sections
                         projectDetailFeatures.innerHTML = '';
                         projectDetailComponents.innerHTML = '';
                         projectDetailApplications.innerHTML = '';
                         projectDetailAdvantages.innerHTML = '';
-                        projectDetailAim.textContent = 'N/A'; // Clear Aim
-                        projectDetailThemeValue.textContent = 'N/A'; // Clear Theme
+                        projectDetailAim.textContent = 'N/A'; 
+                        projectDetailThemeValue.textContent = 'N/A'; 
                         projectDetailSensorsUsed.innerHTML = '';
                         projectSensorView.classList.add('hidden'); 
                         
-                        // Reset AI Summary view
                         aiSummaryContainer.classList.add('hidden'); 
                         aiSummaryText.textContent = 'Click the button above for an intelligent summary...'; 
                         aiSummaryBtn.dataset.summaryText = data.aiSummary;
                         
-                        // Set Core Details
                         projectDetailTitle.textContent = data.name;
                         projectDetailImage.src = data.image;
                         projectDetailDescription.textContent = data.description;
                         projectDetailTime.innerHTML = `<i class="fas fa-clock text-secondary"></i> ${data.time}`;
                         projectDetailChip.innerHTML = `<i class="fas fa-microchip text-secondary"></i> ${data.chip}`;
-                        projectDetailAim.textContent = data.aim || 'Project aim not explicitly defined.'; // NEW AIM
-                        projectDetailThemeValue.textContent = data.theme || 'General'; // NEW THEME
+                        projectDetailAim.textContent = data.aim || 'Project aim not explicitly defined.'; 
+                        projectDetailThemeValue.textContent = data.theme || 'General'; 
 
-                        
-                        // --- FIX: ROBUST JSON PARSING FOR PROJECT LISTS ---
                         const listSections = {
                             applications: projectDetailApplications,
                             advantages: projectDetailAdvantages,
@@ -3348,54 +3321,40 @@
                             try {
                                 const listData = data[key] ? JSON.parse(data[key]) : [];
                                 
-                                // Check if listData is an array and has content
                                 if (Array.isArray(listData) && listData.length > 0) {
-                                    // If it's the sensors list, use the special tag formatting
                                     if (key === 'sensors') {
-                                         // The sensor rendering logic is slightly different (pills, not list items)
                                          listSections[key].innerHTML = listData.map(s => 
                                             `<li class="bg-accent/20 text-accent font-semibold px-3 py-1 rounded-full text-sm flex items-center">
                                                 <i class="fas fa-cube mr-2"></i> ${s}
                                              </li>`
                                         ).join('');
                                     } else {
-                                        // Standard list item formatting
                                         listSections[key].innerHTML = listData.map(item => `<li>${item}</li>`).join('');
                                     }
                                 } else {
-                                    // Handle cases where the array is empty or null
-                                    listSections[key].innerHTML = defaultError;
+                                    listSections[key].innerHTML = '<li>Data not specified.</li>';
                                 }
                             } catch (error) {
-                                // This catches JSON parsing errors and outputs to console
-                                console.error(`E-TECH DATA ERROR: Failed to parse project data for key: ${key}`, error);
-                                // Display a clear error message on the UI element
                                 listSections[key].innerHTML = '<li>Error: Failed to load list data.</li>';
                             }
                         }
                         
-                        // Special handling for sensors visibility
                         const sensorsList = JSON.parse(data.sensors);
                         if (sensorsList && sensorsList.length > 0 && sensorsList[0] !== 'None (Actuator focus)') {
                             projectSensorView.classList.remove('hidden');
                         } else {
                             projectSensorView.classList.add('hidden');
                         }
-                        // --- END FIX ---
                         
-                        // Set data for action buttons
                         addToCartFromDetailBtn.dataset.id = data.id;
                         addToCartFromDetailBtn.dataset.name = data.name;
                         addToCartFromDetailBtn.dataset.price = data.price;
                         addToCartFromDetailBtn.dataset.image = data.image;
                         
-                        // Set Buy Now Link
                         buyNowFromDetailBtn.href = data.buyLink;
                         
-                        // Reset to the first tab (Details & Aim)
                         activateProjectDetailTab(document.querySelector('.project-detail-tabs button[data-tab-target="#tab-details"]'));
 
-                        // Show the modal immediately (FIX: This is the critical line to show the modal)
                         projectDetailModal.style.display = 'flex';
                     });
                 });
@@ -3409,22 +3368,15 @@
                     });
                 });
                 
-                // Re-render KaTeX after injecting new HTML content
                 if (window.renderMathInElement) {
                     renderMathInElement(projectsGrid);
                 }
             }
             
-            // NEW: Project Detail Tab Logic
             function activateProjectDetailTab(clickedButton) {
-                // Deactivate all buttons and hide all content
                 projectDetailTabBtns.forEach(btn => btn.classList.remove('active'));
                 document.querySelectorAll('[data-tab-content]').forEach(content => content.classList.add('hidden'));
-                
-                // Activate the clicked button
                 clickedButton.classList.add('active');
-                
-                // Show the target content
                 const targetId = clickedButton.dataset.tabTarget;
                 const targetContent = document.querySelector(targetId);
                 if (targetContent) {
@@ -3436,16 +3388,13 @@
                 button.addEventListener('click', () => activateProjectDetailTab(button));
             });
 
-            // NEW: AI Summary Button Handler
             aiSummaryBtn.addEventListener('click', () => {
                 const summaryText = aiSummaryBtn.dataset.summaryText;
                 
                 if (summaryText) {
-                    // Simulate loading state
                     aiSummaryText.textContent = "Generating intelligent summary... one moment...";
                     aiSummaryContainer.classList.remove('hidden');
 
-                    // Simulate API response delay (using setTimeout instead of actual API call for demo speed)
                     setTimeout(() => {
                         aiSummaryText.textContent = summaryText;
                     }, 800); 
@@ -3456,7 +3405,6 @@
                 }
             });
             
-            // NEW: Ask TechWhiz button handler inside the Project Detail Modal
             const askTechwhizProjectHandler = (e) => {
                 const projectId = e.currentTarget.dataset.projectId;
                 const project = projectsList.find(p => p.id === projectId);
@@ -3465,48 +3413,37 @@
                 
                 const prompt = `Tell me more about the project, "${project.name}", specifically focusing on its main theme, purpose (aim), and unique features. Assume I am a student ready to start building it.`;
                 
-                // Close project modal and open TechWhiz modal
                 projectDetailModal.style.display = 'none';
                 techwhizModal.style.display = 'flex';
                 
-                // Inject prompt into chat input and trigger submission
                 techwhizInput.value = prompt;
                 sendBtn.click();
             };
 
             askTechwhizDetailBtn.addEventListener('click', askTechwhizProjectHandler);
-            askTechwhizDetailBtnTab.addEventListener('click', askTechwhizProjectHandler); // Tab bar click should also trigger this
+            askTechwhizDetailBtnTab.addEventListener('click', askTechwhizProjectHandler); 
             
-            // FIX: Close Modal Functionality (Ensuring this still works)
             closeProjectDetailBtn.addEventListener('click', () => {
                 projectDetailModal.style.display = 'none';
             });
             
-            // Close modal when clicking outside of the content area
             projectDetailModal.addEventListener('click', (e) => {
-                // Only close if the click target is the modal overlay itself
                 if (e.target === projectDetailModal) {
                     projectDetailModal.style.display = 'none';
                 }
             });
 
-
-            // --- Consolidated Function to Apply Filter and Update UI (Addressing User's Filter Issue) ---
             function applyProjectFilter(filter) {
-                // 1. Update Active State UI for buttons
                 document.querySelectorAll('.filter-btn').forEach(b => {
                     b.classList.remove('bg-secondary', 'hover:bg-accent');
-                    // Ensure the default look is applied before checking for active state
                     b.classList.add('bg-gray-800', 'hover:bg-secondary'); 
 
                     if (b.dataset.filter === filter) {
-                        // Apply active styling
                         b.classList.add('bg-secondary', 'hover:bg-accent');
                         b.classList.remove('bg-gray-800', 'hover:bg-secondary');
                     }
                 });
 
-                // 2. Render the filtered projects
                 renderProjects(filter);
             }
             
@@ -3515,22 +3452,17 @@
                     applyProjectFilter(btn.dataset.filter);
                 });
             });
-            // --- END NEW: Consolidated Filter Function ---
 
-
-            // --- Cart Logic Implementation (Unchanged) ---
             async function addToCart(id, name, price, image) {
-                // Check Inventory (Mock Firestore check)
                 try {
                     const inventoryRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('inventory').doc(id);
                     const doc = await inventoryRef.get();
-                    let currentStock = 10; // Default mock stock
+                    let currentStock = 10; 
                     
                     if (doc.exists) {
                         currentStock = doc.data().stock;
                     } 
-                    // To simulate low/zero stock for testing:
-                    if (id === 'iot2') { currentStock = 0; } // Mock Sold Out for Weather Station
+                    if (id === 'iot2') { currentStock = 0; } 
 
                     const existingItem = cart.find(item => item.id === id);
                     const quantityInCart = existingItem ? existingItem.quantity : 0;
@@ -3554,10 +3486,8 @@
                     showToast(`${name} added to cart!`);
 
                 } catch (error) {
-                    console.error("Error checking inventory: ", error);
                     showToast(`Inventory check failed. Adding to cart anyway.`, 'secondary');
                     
-                    // Fallback to adding without inventory check
                     const existingItem = cart.find(item => item.id === id);
                     if (existingItem) {
                         existingItem.quantity++;
@@ -3578,7 +3508,6 @@
                         return;
                     }
                     
-                    // Check max stock if available
                     if (item.maxStock !== undefined && newQuantity > item.maxStock) {
                         showToast(`Max stock reached for ${item.name}!`, 'accent');
                         return;
@@ -3608,11 +3537,11 @@
                 if (cart.length === 0) {
                     cartModalItemsContainer.innerHTML = '<p class="cart-empty-msg text-gray-400 text-center p-8">Your cart is currently empty. Start exploring projects!</p>';
                     cartCheckoutBtn.disabled = true;
-                    cartCheckoutBtn.classList.remove('btn-primary-action', 'hover:bg-secondary'); // Use new classes
+                    cartCheckoutBtn.classList.remove('btn-primary-action', 'hover:bg-secondary'); 
                     cartCheckoutBtn.classList.add('bg-gray-700', 'cursor-not-allowed');
                 } else {
                     cartCheckoutBtn.disabled = false;
-                    cartCheckoutBtn.classList.add('btn-primary-action', 'hover:bg-secondary'); // Use new classes
+                    cartCheckoutBtn.classList.add('btn-primary-action', 'hover:bg-secondary'); 
                     cartCheckoutBtn.classList.remove('bg-gray-700', 'cursor-not-allowed');
 
                     cart.forEach(item => {
@@ -3680,8 +3609,6 @@
                 projectDetailModal.style.display = 'none';
             });
             
-            // NOTE: The 'Buy Kit Now' button uses the `buyLink` data attribute
-            // and opens it in a new tab for an immediate purchase flow.
             buyNowFromDetailBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const link = buyNowFromDetailBtn.getAttribute('href');
@@ -3701,7 +3628,7 @@
                 }
                 if (!auth.currentUser) {
                     showToast("Please login to proceed to checkout.", 'accent');
-                    authModal.style.display = 'flex'; // Use flex to match modal-overlay-center
+                    authModal.style.display = 'flex'; 
                     return;
                 }
                 const options = {
@@ -3743,7 +3670,6 @@
                 rzp.open();
             });
 
-            // --- Order History Logic (Unchanged) ---
             orderHistoryBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (auth.currentUser) {
@@ -3803,8 +3729,6 @@
                 }
             }
 
-
-            // --- Parallax Scrolling Effect (Unchanged) ---
             const sections = document.querySelectorAll('.section');
             window.addEventListener('scroll', () => {
                 const scrollTop = window.pageYOffset;
@@ -3816,46 +3740,36 @@
                 });
             });
             
-            // --- NEW: Scroll-to-Hide Header Logic ---
             let lastScrollTop = 0;
             const scrollThreshold = 50; 
             
             window.addEventListener('scroll', () => {
                 const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 
-                // Only hide/show if the scroll movement is significant and the mobile menu is closed
                 if (window.innerWidth <= 768 && !navMenu.classList.contains('active')) {
                     if (currentScrollTop > lastScrollTop && currentScrollTop > scrollThreshold) {
-                        // Scrolling down
                         mainHeader.classList.add('header-hidden');
                     } else if (currentScrollTop < lastScrollTop) {
-                        // Scrolling up
                         mainHeader.classList.remove('header-hidden');
                     }
                 } else if (window.innerWidth > 768) {
-                    // Always show header on desktop
                     mainHeader.classList.remove('header-hidden');
                 }
                 
-                lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+                lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; 
             });
 
-            // --- Mobile Menu Toggle and Auto-Hide Logic (Modified) ---
             mobileToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
 
-            // Auto-hide when a link is clicked (on mobile only)
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth <= 768) {
                         navMenu.classList.remove('active');
-                        // Ensure header becomes visible if navigation is used
                         mainHeader.classList.remove('header-hidden'); 
                     }
                 });
             });
 
-            // --- Auth Modal Logic (Unchanged) ---
-            // NOTE: Changing classList.remove/add('hidden') to element.style.display for centering consistency
             loginBtnNav.addEventListener('click', (e) => { e.preventDefault(); authModal.style.display = 'flex'; });
             closeAuthBtn.addEventListener('click', () => authModal.style.display = 'none');
             window.addEventListener('click', (e) => { if (e.target == authModal) authModal.style.display = 'none'; });
@@ -3868,22 +3782,6 @@
                 });
             });
             
-            // --- FIX: Google Sign-In Function using signInWithRedirect (Unchanged) ---
-            googleLoginBtn.addEventListener('click', async (e) => {
-                e.preventDefault();
-                const provider = new firebase.auth.GoogleAuthProvider();
-                try {
-                    // Use signInWithRedirect instead of signInWithPopup to avoid environment security restrictions
-                    await auth.signInWithRedirect(provider); 
-                    // Note: Execution stops here as the page redirects.
-                } catch (error) {
-                    console.error("Google Sign-In Error (Pre-Redirect):", error);
-                    showToast(`Google Sign-In Failed: ${error.message.split(' (')[0]}`, 'accent');
-                }
-            });
-            // --- END FIX: Google Sign-In Function ---
-
-            // --- Firebase Auth Listener & Profile Setup (Unchanged) ---
             auth.onAuthStateChanged(user => {
                 if (user) {
                     userId = user.uid;
@@ -3892,17 +3790,12 @@
                     userName.textContent = user.displayName || user.email;
                     userAvatar.textContent = (user.displayName || user.email).charAt(0).toUpperCase();
                     
-                    // Set up Firestore listener for the current user's progress
                     setupProgressListener(user.uid);
-                    // document.getElementById('skill-tree-status').textContent = "Double-click a node to mark as complete/incomplete!";
-                    // suggestionsSidebar.classList.remove('opacity-50', 'pointer-events-none');
                 } else {
                     userId = null;
                     loginBtnNav.classList.remove('hidden');
                     userStatus.classList.add('hidden');
-                    setupProgressListener(null); // Stop listener and clear progress
-                    // document.getElementById('skill-tree-status').textContent = "Log in to view your personalized progress.";
-                    // suggestionsSidebar.classList.add('opacity-50', 'pointer-events-none');
+                    setupProgressListener(null); 
                 }
             });
             
@@ -3925,7 +3818,6 @@
                     .catch(error => console.error(error.message));
             });
             
-            // Update the general logout button and add profile modal logic
             logoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 auth.signOut().then(() => {
@@ -3941,7 +3833,6 @@
                 });
             });
 
-            // --- Profile Modal Logic (Unchanged) ---
             userAvatar.addEventListener('click', () => {
                 const user = auth.currentUser;
                 if (!user) return;
@@ -3969,7 +3860,6 @@
                  }
             });
 
-            // --- START: Component Data Source (Expanded Content) ---
             const componentsData = {
                 resistor: { 
                     title: "Resistor", 
@@ -4179,42 +4069,34 @@
                     characteristics: ["Detects gestures like wave, swipe, and scroll", "Works with infrared light", "Provides non-contact control"],
                     applications: "Human-computer interaction (HCI), touchless switches, and robotics control."
                 }
-              
             };
-            // --- END: Component Data Source (Expanded Content) ---
 
-
-            // FIX: Component Data Display Logic
             componentCards.forEach(card => {
                 card.addEventListener('click', () => {
                     const componentType = card.dataset.component;
                     const compData = componentsData[componentType];
                     
-                    // Close other modals before opening component modal
                     if (projectDetailModal) projectDetailModal.style.display = 'none';
                     
-                    stopSensorVisualization(); // Stop any existing visualization
+                    stopSensorVisualization(); 
 
                     if (compData) {
                         detailTitle.textContent = compData.title;
                         detailImg.src = compData.img;
                         detailDefinition.textContent = compData.definition;
                         
-                        // Show/Hide Sensor Visualization Area
                         if (compData.isSensor) {
                             sensorVizArea.classList.remove('hidden');
                             if (compData.sensorType === 'ultrasonic') {
-                                // Only start the complex mock for the specified Ultrasonic Sensor
                                 startSensorVisualization('ultrasonic');
                             } else {
                                 sensorDataReadout.textContent = `Live Mock unavailable for ${compData.title}.`;
                             }
                         } else {
-                            sensorVizArea.classList.add('hidden'); // Ensure it's hidden for non-sensors
+                            sensorVizArea.classList.add('hidden'); 
                         }
                         
                         try {
-                            const tempDiv = document.createElement('div');
                             const latexString = compData.symbol.replace(/\\text\{/g, '\\text{').replace(/}/g, '}');
                             
                             if (latexString.includes('\\Omega') || latexString.includes('\\text{') || latexString.includes('}')) {
@@ -4223,7 +4105,6 @@
                                 detailSymbol.textContent = compData.symbol;
                             }
                         } catch (e) {
-                             console.error("KaTeX rendering failed:", e);
                              detailSymbol.textContent = compData.symbol; 
                         }
 
@@ -4239,9 +4120,8 @@
                         
                         askTechwhizComponentBtn.dataset.componentName = compData.title;
 
-                        componentDetailModal.style.display = 'flex'; // This line ensures immediate display
+                        componentDetailModal.style.display = 'flex'; 
                     } else {
-                        // Fallback if data is missing
                         detailTitle.textContent = "Data Unavailable";
                         detailImg.src = "https://via.placeholder.com/400x300/333333/ffffff?text=No+Image";
                         detailDefinition.textContent = "Detailed information for this component is currently under construction.";
@@ -4249,45 +4129,40 @@
                         detailCharacteristics.innerHTML = '<li>Check back soon!</li>';
                         detailApplications.textContent = "N/A";
                         askTechwhizComponentBtn.dataset.componentName = componentType;
-                        componentDetailModal.style.display = 'flex'; // This line ensures immediate display
+                        componentDetailModal.style.display = 'flex'; 
                     }
                 });
             });
 
             closeDetailBtn.addEventListener('click', () => { 
                 componentDetailModal.style.display = 'none'; 
-                stopSensorVisualization(); // Stop visualization when closing
+                stopSensorVisualization(); 
             });
             
-            // Close component modal if clicking outside
             componentDetailModal.addEventListener('click', (e) => {
                 if (e.target === componentDetailModal) {
                     componentDetailModal.style.display = 'none';
-                    stopSensorVisualization(); // Stop visualization when closing
+                    stopSensorVisualization(); 
                 }
             });
 
-            // NEW: Contextual AI button handler (Unchanged)
             askTechwhizComponentBtn.addEventListener('click', () => {
                 const componentName = askTechwhizComponentBtn.dataset.componentName || 'this component';
                 const prompt = `Explain the key function and most common applications of the ${componentName} for a beginner in electronics.`;
                 
-                // Close component modal and open TechWhiz modal
                 componentDetailModal.style.display = 'none';
-                stopSensorVisualization(); // Stop visualization before moving
+                stopSensorVisualization(); 
                 techwhizModal.style.display = 'flex';
                 
-                // Inject prompt into chat input and trigger submission
                 techwhizInput.value = prompt;
                 sendBtn.click();
             });
 
-            // --- TechWhiz Assistant Logic (Updated for full functionality) ---
             let recognition;
             let isListening = false;
             const synth = window.speechSynthesis;
             let currentUtterance = null;
-            const geminiApiKey = "AIzaSyCODRIZL8mNqWpUf0HdWcoCedimZM_0G5E"; // Using empty string for auto-injection
+            const geminiApiKey = "AIzaSyCbf1m39RDCgOO8P0IUvt6iVjYFGyEantw"; 
 
             techwhizFab.addEventListener('click', () => techwhizModal.style.display = 'flex');
             closeTechwhizModalBtn.addEventListener('click', () => {
@@ -4308,11 +4183,14 @@
                     listeningStatus.classList.remove('hidden');
                 };
                 
-                recognition.onresult = (event) => { 
-                    const transcript = event.results[0][0].transcript;
-                    techwhizInput.value = transcript;
-                    // Automatically process the command once transcribed
-                    processCommand(transcript);
+               recognition.onresult = (event) => { 
+                    
+                    if (event.results[0].isFinal) {
+                        const transcript = event.results[0][0].transcript;
+                        techwhizInput.value = transcript;
+                        processCommand(transcript);
+                        recognition.stop(); 
+                    }
                 };
 
                 recognition.onerror = (event) => {
@@ -4328,13 +4206,10 @@
                 };
 
                 recognition.onend = () => {
-                    // Only perform cleanup if recognition stops naturally or by error, 
-                    // but not if it stops because a command was successfully processed (which calls processCommand)
                     if (isListening) { 
                         isListening = false;
                         micBtn.classList.remove('speech-active');
                         listeningStatus.classList.add('hidden');
-                        // No need to re-enable mic/input here as processCommand's finally block handles it.
                     }
                 };
             } else {
@@ -4379,18 +4254,23 @@
                 synth.speak(currentUtterance); 
             }
 
-            // --- NEW: Handle UI and Predefined Commands
             function handleUICommand(lowerCommand) {
                 let action = { executed: false, response: '' };
 
-                // 1. Greetings / Simple Predefined Responses
                 if (lowerCommand.includes('hello') || lowerCommand.includes('hi') || lowerCommand.includes('whats up')) {
                     action.executed = true;
                     action.response = "Hello! I am TechWhiz, your electronics and CSE assistant. How can I assist you with your learning today?";
                 } else if (lowerCommand.includes('your name') || lowerCommand.includes('who are you')) {
                     action.executed = true;
-                    action.response = "I am TECHWHIZ, a helpful assistant powered by Google's Gemini API, designed to assist you with electronics and computer science projects.";
+                    action.response = "I am TECHWHIZ, a helpful assistant developed by Indra, designed to assist you with electronics and computer science projects.";
                 } else if (lowerCommand.includes('what can you do') || lowerCommand.includes('your capabilities')) {
+                    action.executed = true;
+                    action.response = "I can help you with electronics and computer science concepts, suggest projects, provide career advice, and even help with debugging and code explanation. Just ask!";
+                }else if (lowerCommand.includes('about this website') || lowerCommand.includes('about this html file')) {
+                    action.executed = true;
+                    action.response = "This is the E-TECH SOLUTIONS dynamic e-learning portal. It offers various courses in electronics and computer science, features user authentication, tracks course progress, and integrates payment options.";
+                }
+                else if (lowerCommand.includes('what can you do') || lowerCommand.includes('your capabilities')) {
                     action.executed = true;
                     action.response = "I can help you with electronics and computer science concepts, suggest projects, provide career advice, and even help with debugging and code explanation. Just ask!";
                 } else if (lowerCommand.includes('about this website') || lowerCommand.includes('about this html file')) {
@@ -5478,8 +5358,37 @@
     action.executed = true;
     action.response = "A sequential circuit is a digital circuit where the output depends on present inputs and past states.";
 } 
-                
-                // 2. Open/Close Application (Modals)
+                else if (lowerCommand.includes('open cart') || lowerCommand.includes('show cart')) {
+                    cartModal.classList.add('open');
+                    action.executed = true;
+                    action.response = "Opening the shopping cart for you now.";
+                } else if (lowerCommand.includes('close cart') || lowerCommand.includes('hide cart')) {
+                    cartModal.classList.remove('open');
+                    action.executed = true;
+                    action.response = "Closing the shopping cart.";
+                } else if (lowerCommand.includes('close assistant') || lowerCommand.includes('close chat')) {
+                    techwhizModal.style.display = 'none';
+                    if (synth.speaking) synth.cancel();
+                    action.executed = true;
+                    action.response = "Closing the assistant. Click the robot icon if you need me again!";
+                } else if (lowerCommand.includes('show login') || lowerCommand.includes('open login')) {
+                    authModal.style.display = 'flex';
+                    action.executed = true;
+                    action.response = "Opening the login/register module for you.";
+                }
+                else if (lowerCommand.includes('go to projects') || lowerCommand.includes('show me projects')) {
+                    document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+                    action.executed = true;
+                    action.response = "Scrolling down to the projects section now.";
+                } else if (lowerCommand.includes('go to courses') || lowerCommand.includes('view courses')) {
+                    document.getElementById('courses').scrollIntoView({ behavior: 'smooth' });
+                    action.executed = true;
+                    action.response = "Taking you to the available courses.";
+                } else if (lowerCommand.includes('go to basics') || lowerCommand.includes('show basics')) {
+                    document.getElementById('basics').scrollIntoView({ behavior: 'smooth' });
+                    action.executed = true;
+                    action.response = "Navigating to the Electronic Basics section.";
+                }
                 else if (lowerCommand.includes('open cart') || lowerCommand.includes('show cart')) {
                     cartModal.classList.add('open');
                     action.executed = true;
@@ -5499,7 +5408,6 @@
                     action.response = "Opening the login/register module for you.";
                 }
 
-                // 3. Spontaneous Actions (Navigation within the app)
                 else if (lowerCommand.includes('go to projects') || lowerCommand.includes('show me projects')) {
                     document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
                     action.executed = true;
@@ -5514,7 +5422,6 @@
                     action.response = "Navigating to the Electronic Basics section.";
                 }
                 
-                // 4. External Application Launches (New functionality)
                 else if (lowerCommand.includes('open google')) {
                     window.open('https://www.google.com', '_blank');
                     action.executed = true;
@@ -5545,7 +5452,6 @@
                     action.response = "Opening Gmail in a new tab.";
                 }
                 
-                // 5. Status Check
                 else if (lowerCommand.includes('what is my progress') || lowerCommand.includes('my completion status')) {
                     const completed = Object.keys(userProgress).length;
                     const total = allConcepts.length;
@@ -5563,11 +5469,10 @@
 
                 return action;
             }
-            // --- END: Handle UI and Predefined Commands
 
             async function callGeminiApi(prompt, systemInstruction = null) {
                 if (geminiApiKey === "") {
-                    // This logic assumes the environment will inject the key, if not, it will fail gracefully.
+                    
                 }
                 
                 let backoff = 1000;
@@ -5579,7 +5484,7 @@
                             contents: chatHistoryForApi,
                             systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined
                         };
-                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiApiKey}`;
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiApiKey}`;
 
                         const response = await fetch(apiUrl, {
                             method: 'POST',
@@ -5604,77 +5509,47 @@
                     }
                 }
             }
+async function processCommand(command) {
+                if (!command) return;
 
-            // --- MODIFIED: processCommand to include predefined answers and spontaneous actions
-            async function processCommand(command) {
-                if (!command || techwhizInput.disabled) return;
                 
-                // Clear input only if it's not a voice command that populated it (recognition.onresult clears it)
-                if (techwhizInput.value.trim() === command) {
-                    techwhizInput.value = '';
-                }
-
-                // Show user message immediately
                 appendMessage(command, 'user');
-                
-                techwhizInput.disabled = true;
-                sendBtn.disabled = true;
-                micBtn.disabled = true;
+                techwhizInput.value = ''; 
                 thinkingStatus.classList.remove('hidden');
 
+                
+                const localAction = handleUICommand(command.toLowerCase());
+
+                if (localAction.executed) {
+                     thinkingStatus.classList.add('hidden');
+                     appendMessage(localAction.response, 'assistant');
+                     readAloud(localAction.response);
+                     return;
+                }
+
+                
                 try {
-                    const lowerCommand = command.toLowerCase();
-                    let responseText = '';
+                   
+                    const systemContext = "You are TechWhiz, an expert AI assistant for E-TECH SOLUTIONS. You help students with electronics, IoT, Arduino, and coding questions. Keep answers concise, encouraging, and helpful for beginners.";
                     
-                    // 1. Check for predefined UI/Action commands
-                    const uiAction = handleUICommand(lowerCommand);
-
-                    if (uiAction.executed) {
-                        responseText = uiAction.response;
-                    } else {
-                        // 2. If not a predefined action, use Gemini API
-                        let baseSystemInstruction = "You are a professional and helpful electronics and computer science assistant. Provide a friendly and concise answer. Respond exclusively in the language of the user's query. Do not refer to yourself as an AI or a language model.";
-
-                        // Contextual hint for common electronics questions
-                        if (lowerCommand.includes('arduino') || lowerCommand.includes('esp32') || lowerCommand.includes('resistor') || lowerCommand.includes('sensor')) {
-                             baseSystemInstruction += " Provide a simple, clear explanation suitable for a beginner or hobbyist.";
-                        }
-
-                        responseText = await callGeminiApi(command, baseSystemInstruction);
-                    }
+                   
+                    const response = await callGeminiApi(command, systemContext);
                     
-                    appendMessage(responseText, 'assistant');
-                    readAloud(responseText);
+                    thinkingStatus.classList.add('hidden');
+                    appendMessage(response, 'assistant');
+                    readAloud(response);
+                    
                 } catch (error) {
-                    const errorMsg = "Sorry, I'm having trouble connecting to my brain right now. The API request failed.";
+                    console.error("TechWhiz Error:", error);
+                    thinkingStatus.classList.add('hidden');
+                    
+                    const errorMsg = "I'm having trouble connecting to the server. Please check your internet connection or API key.";
                     appendMessage(errorMsg, 'assistant');
                     readAloud(errorMsg);
-                } finally {
-                    // FIX: Re-enable ALL controls after processing, regardless of how the command started.
-                    techwhizInput.disabled = false;
-                    sendBtn.disabled = false;
-                    micBtn.disabled = false;
-// Cleanup visual state
-                    thinkingStatus.classList.add('hidden');
-                    micBtn.classList.remove('speech-active');
-                    listeningStatus.classList.add('hidden');
-
-                    techwhizInput.focus();
                 }
             }
-            
-            // Initialization
-            // Ensure the initial filter is applied to render projects immediately on load
-            applyProjectFilter('all'); 
-            updateCart();
-            // Start the skill tree render with an empty progress object initially
-            renderSkillTree({});
-            
-            if (window.renderMathInElement) {
-                renderMathInElement(document.body);
-            }
+          
         });
     </script>
 </body>
 </html>
-
